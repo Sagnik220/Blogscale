@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pro Black &amp; Yellow Admin Editor</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#FACC15", 
+                        "primary-hover": "#EAB308",
+                        "background-light": "#ffffff",
+                        "background-dark": "#000000",
+                        "surface-dark": "#111111",
+                        "border-dark": "#333333",
+                        "accent": "#FACC15",
+                        "accent-text": "#000000"
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "mono": ["ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", "monospace"]
+                    },
+                    borderRadius: {"DEFAULT": "0px", "lg": "0px", "xl": "0px", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #000000; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333333; 
+            border-radius: 0px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #FACC15; 
+        }
+        .content-editable:empty:before {
+            content: attr(placeholder);
+            color: #6b7280;
+            pointer-events: none;
+            display: block;
+        }.diagram-line {
+            stroke-dasharray: 4;
+            animation: dash 30s linear infinite;
+        }
+        @keyframes dash {
+            to {
+                stroke-dashoffset: 1000;
+            }
+        }
+        .selection-yellow ::selection {
+            background-color: #FACC15;
+            color: #000000;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-200 font-display min-h-screen flex overflow-hidden selection-yellow">
+<aside class="w-64 border-r border-slate-200 dark:border-border-dark flex flex-col bg-background-light dark:bg-black hidden md:flex z-20">
+<div class="p-6 flex items-center gap-3 border-b border-slate-200 dark:border-border-dark">
+<div class="bg-center bg-no-repeat bg-cover h-8 w-8 ring-1 ring-border-dark bg-yellow-400 text-black flex items-center justify-center font-bold" data-alt="Engineering logo">PRO</div>
+<div>
+<h1 class="text-sm font-bold tracking-tight uppercase">Eng. Platform</h1>
+<p class="text-[10px] uppercase tracking-widest text-slate-500 dark:text-slate-400">Knowledge Base</p>
+</div>
+</div>
+<nav class="flex-1 overflow-y-auto py-6 px-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-neutral-900 hover:text-black dark:hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-primary transition-colors">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-black dark:bg-yellow-400/10 text-black dark:text-yellow-400 border border-black/10 dark:border-yellow-400/20 transition-colors group" href="#">
+<span class="material-symbols-outlined text-[20px] fill-1">article</span>
+<span class="text-sm font-bold">Technical Posts</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-neutral-900 hover:text-black dark:hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-primary transition-colors">hub</span>
+<span class="text-sm font-medium">System Designs</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-neutral-900 hover:text-black dark:hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-primary transition-colors">api</span>
+<span class="text-sm font-medium">API Specs</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-neutral-900 hover:text-black dark:hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-primary transition-colors">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-200 dark:border-border-dark">
+<div class="flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-slate-100 dark:hover:bg-neutral-900 transition-colors group">
+<div class="w-8 h-8 bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center text-[10px] text-black dark:text-white font-mono font-bold border border-black/5 dark:border-white/10 group-hover:border-primary transition-colors">AE</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-medium truncate group-hover:text-black dark:group-hover:text-white">Alex Eng.</p>
+<p class="text-[10px] uppercase text-slate-500 truncate">Staff Engineer</p>
+</div>
+<span class="material-symbols-outlined text-[18px] text-slate-400">unfold_more</span>
+</div>
+</div>
+</aside>
+<main class="flex-1 flex flex-col relative h-full overflow-hidden bg-white dark:bg-background-dark">
+<header class="h-16 border-b border-slate-200 dark:border-border-dark flex items-center justify-between px-8 bg-white dark:bg-black shrink-0 z-10">
+<div class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+<span class="hidden md:inline hover:text-black dark:hover:text-white cursor-pointer uppercase tracking-wider text-xs font-bold">Blog</span>
+<span class="material-symbols-outlined text-[16px] hidden md:inline text-slate-600">chevron_right</span>
+<span class="text-slate-900 dark:text-slate-100 font-bold">Vector Database Scaling Strategies</span>
+<span class="ml-2 px-2 py-0.5 text-black bg-yellow-400 text-[10px] font-bold uppercase tracking-wider font-mono">Draft</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-[10px] uppercase tracking-widest text-slate-500 dark:text-slate-400 hidden sm:inline font-mono">Last saved 42s ago</span>
+<button class="p-2 text-slate-500 hover:text-black dark:hover:text-white transition-colors hover:bg-slate-100 dark:hover:bg-neutral-900">
+<span class="material-symbols-outlined text-[20px]">history</span>
+</button>
+<button class="p-2 text-slate-500 hover:text-black dark:hover:text-white transition-colors hover:bg-slate-100 dark:hover:bg-neutral-900 md:hidden">
+<span class="material-symbols-outlined text-[20px]">menu</span>
+</button>
+</div>
+</header>
+<div class="flex-1 overflow-y-auto relative p-8 md:px-20 lg:px-32 scroll-smooth bg-white dark:bg-black">
+<div class="max-w-4xl mx-auto pb-32">
+<div class="flex gap-6 mb-8 group opacity-0 hover:opacity-100 transition-opacity duration-200">
+<button class="flex items-center gap-2 text-slate-400 hover:text-black dark:hover:text-white text-xs uppercase tracking-wider font-bold transition-colors">
+<span class="material-symbols-outlined text-[18px]">image</span> Add Cover
+                    </button>
+<button class="flex items-center gap-2 text-slate-400 hover:text-black dark:hover:text-white text-xs uppercase tracking-wider font-bold transition-colors">
+<span class="material-symbols-outlined text-[18px]">sentiment_satisfied</span> Add Icon
+                    </button>
+</div>
+<input class="w-full bg-transparent border-none text-5xl md:text-6xl font-bold placeholder-slate-300 dark:placeholder-neutral-800 text-black dark:text-white focus:ring-0 px-0 mb-8 font-display tracking-tight" placeholder="Untitled" type="text" value="Scaling Vector Databases for RAG"/>
+<div class="group relative flex items-start gap-2 mb-6 -ml-12 pl-12">
+<div class="absolute left-0 top-1 p-1 rounded-sm hover:bg-slate-100 dark:hover:bg-neutral-900 cursor-grab opacity-0 group-hover:opacity-100 transition-opacity flex items-center text-slate-400">
+<span class="material-symbols-outlined text-[16px]">drag_indicator</span>
+<span class="material-symbols-outlined text-[16px] text-yellow-500">add</span>
+</div>
+<p class="text-lg text-slate-800 dark:text-slate-300 leading-relaxed w-full outline-none font-light" contenteditable="true">
+                        Implementing Retrieval-Augmented Generation (RAG) at scale requires careful consideration of the underlying vector store architecture. We need to balance latency, recall, and infrastructure costs.
+                    </p>
+</div>
+<div class="group relative flex items-start gap-2 mt-10 mb-6 -ml-12 pl-12">
+<div class="absolute left-0 top-1 p-1 rounded-sm hover:bg-slate-100 dark:hover:bg-neutral-900 cursor-grab opacity-0 group-hover:opacity-100 transition-opacity flex items-center text-slate-400">
+<span class="material-symbols-outlined text-[16px]">drag_indicator</span>
+<span class="material-symbols-outlined text-[16px] text-yellow-500">add</span>
+</div>
+<h2 class="text-3xl font-bold text-black dark:text-white w-full outline-none tracking-tight" contenteditable="true">
+                        Architecture Overview
+                    </h2>
+</div>
+<div class="group relative mb-10 -ml-12 pl-12">
+<div class="absolute left-0 top-1/2 -translate-y-1/2 p-1 rounded-sm hover:bg-slate-100 dark:hover:bg-neutral-900 cursor-grab opacity-0 group-hover:opacity-100 transition-opacity flex items-center text-slate-400">
+<span class="material-symbols-outlined text-[16px]">drag_indicator</span>
+<span class="material-symbols-outlined text-[16px] text-yellow-500">add</span>
+</div>
+<div class="border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-surface-dark overflow-hidden">
+<div class="flex items-center justify-between px-4 py-3 bg-white dark:bg-black border-b border-neutral-200 dark:border-neutral-800">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">hub</span>
+<span class="text-xs font-mono text-slate-500 uppercase tracking-wide">Mermaid.js Preview</span>
+</div>
+<button class="text-xs text-slate-500 hover:text-black dark:hover:text-white flex items-center gap-1 uppercase font-bold tracking-wider">
+<span class="material-symbols-outlined text-[14px]">edit</span> Edit
+                            </button>
+</div>
+<div class="p-8 flex justify-center items-center bg-neutral-50 dark:bg-surface-dark">
+<svg height="200" viewBox="0 0 400 200" width="400" xmlns="http://www.w3.org/2000/svg">
+<rect fill="#000000" height="40" stroke="#FACC15" stroke-width="2" width="80" x="20" y="80"></rect>
+<text fill="#fff" font-family="monospace" font-size="10" text-anchor="middle" x="60" y="105">User Query</text>
+<rect fill="#333333" height="40" stroke="#666666" stroke-width="1" width="100" x="150" y="80"></rect>
+<text fill="#fff" font-family="monospace" font-size="10" text-anchor="middle" x="200" y="105">Embeddings API</text>
+<rect fill="#FACC15" height="40" stroke="#EAB308" stroke-width="1" width="80" x="300" y="30"></rect>
+<text fill="#000000" font-family="monospace" font-size="10" font-weight="bold" text-anchor="middle" x="340" y="55">Redis Cache</text>
+<rect fill="#000000" height="40" stroke="#ffffff" stroke-width="1" width="80" x="300" y="130"></rect>
+<text fill="#fff" font-family="monospace" font-size="10" text-anchor="middle" x="340" y="155">pgvector</text>
+<line marker-end="url(#arrowhead)" stroke="#666666" stroke-width="2" x1="100" x2="150" y1="100" y2="100"></line>
+<line stroke="#666666" stroke-width="2" x1="250" x2="280" y1="100" y2="100"></line>
+<line stroke="#666666" stroke-width="2" x1="280" x2="280" y1="100" y2="50"></line>
+<line marker-end="url(#arrowhead)" stroke="#666666" stroke-width="2" x1="280" x2="300" y1="50" y2="50"></line>
+<line stroke="#666666" stroke-width="2" x1="280" x2="280" y1="100" y2="150"></line>
+<line marker-end="url(#arrowhead)" stroke="#666666" stroke-width="2" x1="280" x2="300" y1="150" y2="150"></line>
+<defs>
+<marker id="arrowhead" markerHeight="7" markerWidth="10" orient="auto" refX="9" refY="3.5">
+<polygon fill="#666666" points="0 0, 10 3.5, 0 7"></polygon>
+</marker>
+</defs>
+</svg>
+</div>
+</div>
+<p class="text-center text-[10px] text-slate-400 mt-3 font-mono uppercase tracking-widest">Fig 1.1: Query Routing Logic</p>
+</div>
+<div class="group relative mb-10 -ml-12 pl-12">
+<div class="absolute left-0 top-1/2 -translate-y-1/2 p-1 rounded-sm hover:bg-slate-100 dark:hover:bg-neutral-900 cursor-grab opacity-0 group-hover:opacity-100 transition-opacity flex items-center text-slate-400">
+<span class="material-symbols-outlined text-[16px]">drag_indicator</span>
+<span class="material-symbols-outlined text-[16px] text-yellow-500">add</span>
+</div>
+<div class="overflow-hidden border border-neutral-200 dark:border-neutral-800">
+<table class="w-full text-left text-sm text-slate-600 dark:text-slate-400">
+<thead class="bg-neutral-100 dark:bg-neutral-900 text-xs uppercase font-bold text-slate-800 dark:text-slate-200 font-mono tracking-wider">
+<tr>
+<th class="px-6 py-4 border-b border-neutral-200 dark:border-neutral-800 w-1/4">Metric</th>
+<th class="px-6 py-4 border-b border-neutral-200 dark:border-neutral-800 w-1/4">Qdrant</th>
+<th class="px-6 py-4 border-b border-neutral-200 dark:border-neutral-800 w-1/4">Pinecone</th>
+<th class="px-6 py-4 border-b border-neutral-200 dark:border-neutral-800 w-1/4">Milvus</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-neutral-200 dark:divide-neutral-800 bg-white dark:bg-black">
+<tr class="hover:bg-yellow-50 dark:hover:bg-yellow-900/10 transition-colors">
+<td class="px-6 py-4 font-mono font-bold text-black dark:text-white">p99 Latency (ms)</td>
+<td class="px-6 py-4">24</td>
+<td class="px-6 py-4">18</td>
+<td class="px-6 py-4">32</td>
+</tr>
+<tr class="hover:bg-yellow-50 dark:hover:bg-yellow-900/10 transition-colors">
+<td class="px-6 py-4 font-mono font-bold text-black dark:text-white">Throughput (QPS)</td>
+<td class="px-6 py-4">1,200</td>
+<td class="px-6 py-4">2,400</td>
+<td class="px-6 py-4">950</td>
+</tr>
+<tr class="hover:bg-yellow-50 dark:hover:bg-yellow-900/10 transition-colors">
+<td class="px-6 py-4 font-mono font-bold text-black dark:text-white">Cost / 1M Vectors</td>
+<td class="px-6 py-4">$45</td>
+<td class="px-6 py-4">$70</td>
+<td class="px-6 py-4">$30</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="text-center text-[10px] text-slate-400 mt-3 font-mono uppercase tracking-widest">Table 1: Benchmark Results (1M Vectors, 1536 dim)</p>
+</div>
+<div class="group relative mb-8 -ml-12 pl-12">
+<div class="absolute left-0 top-4 p-1 rounded-sm hover:bg-slate-100 dark:hover:bg-neutral-900 cursor-grab opacity-0 group-hover:opacity-100 transition-opacity flex items-center text-slate-400">
+<span class="material-symbols-outlined text-[16px]">drag_indicator</span>
+<span class="material-symbols-outlined text-[16px] text-yellow-500">add</span>
+</div>
+<div class="bg-neutral-900 border border-neutral-800 overflow-hidden font-mono text-sm shadow-sm">
+<div class="flex justify-between items-center px-4 py-2 bg-neutral-800 border-b border-neutral-700">
+<span class="text-slate-400 text-xs font-mono">ingestion_pipeline.py</span>
+<div class="flex items-center gap-3">
+<span class="text-yellow-500 text-xs font-bold uppercase tracking-wider">Python 3.11</span>
+<button class="text-slate-400 hover:text-white"><span class="material-symbols-outlined text-[14px]">content_copy</span></button>
+</div>
+</div>
+<div class="p-6 overflow-x-auto text-slate-300 leading-relaxed">
+<pre><code><span class="text-purple-400">import</span> asyncio
+<span class="text-purple-400">from</span> vector_store <span class="text-purple-400">import</span> QdrantClient
+<span class="text-blue-400">async def</span> <span class="text-yellow-400">ingest_documents</span>(documents: list[str]):
+    <span class="text-slate-500"># Initialize client with API key</span>
+    client = QdrantClient(url=<span class="text-green-400">"https://..."</span>)
+    <span class="text-slate-500"># Batch process embeddings</span>
+    embeddings = <span class="text-purple-400">await</span> model.encode(documents)
+    <span class="text-purple-400">await</span> client.upsert(
+        collection_name=<span class="text-green-400">"production_kb"</span>,
+        points=embeddings
+    )
+    <span class="text-purple-400">return</span> <span class="text-blue-400">True</span></code></pre>
+</div>
+</div>
+</div>
+<div class="group relative flex items-center gap-2 mb-3 -ml-12 pl-12">
+<div class="absolute left-0 top-1 p-1 rounded-sm hover:bg-slate-100 dark:hover:bg-neutral-900 cursor-grab opacity-0 group-hover:opacity-100 transition-opacity flex items-center text-slate-400">
+<span class="material-symbols-outlined text-[16px]">drag_indicator</span>
+<span class="material-symbols-outlined text-[16px] text-yellow-500">add</span>
+</div>
+<div class="text-lg text-slate-800 dark:text-slate-300 leading-relaxed w-full outline-none content-editable relative font-light" contenteditable="true" placeholder="Type '/' for commands"></div>
+<div class="absolute left-10 top-8 w-80 bg-white dark:bg-neutral-900 shadow-2xl border border-neutral-200 dark:border-neutral-800 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-100 flex flex-col max-h-[400px] ring-1 ring-black/5 dark:ring-white/10">
+<div class="overflow-y-auto custom-scrollbar">
+<div class="p-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-white dark:bg-neutral-900 sticky top-0 backdrop-blur-sm z-10 border-b border-neutral-100 dark:border-neutral-800">Engineering Blocks</div>
+<button class="w-full text-left flex items-center gap-4 px-4 py-3 hover:bg-yellow-400 hover:text-black dark:hover:bg-yellow-400 dark:hover:text-black transition-colors group">
+<div class="w-10 h-10 bg-neutral-100 dark:bg-black border border-neutral-200 dark:border-neutral-800 flex items-center justify-center group-hover:bg-black group-hover:border-black dark:group-hover:bg-black dark:group-hover:border-black transition-colors">
+<span class="material-symbols-outlined text-[20px] text-slate-500 dark:text-slate-400 group-hover:text-yellow-400 dark:group-hover:text-yellow-400">hub</span>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-900 dark:text-slate-100 group-hover:text-black dark:group-hover:text-black">Architecture Diagram</span>
+<span class="text-[10px] text-slate-500 dark:text-slate-400 group-hover:text-black/70 dark:group-hover:text-black/70">Mermaid.js or Graphviz chart.</span>
+</div>
+</button>
+<button class="w-full text-left flex items-center gap-4 px-4 py-3 hover:bg-yellow-400 hover:text-black dark:hover:bg-yellow-400 dark:hover:text-black transition-colors group">
+<div class="w-10 h-10 bg-neutral-100 dark:bg-black border border-neutral-200 dark:border-neutral-800 flex items-center justify-center group-hover:bg-black group-hover:border-black dark:group-hover:bg-black dark:group-hover:border-black transition-colors">
+<span class="material-symbols-outlined text-[20px] text-slate-500 dark:text-slate-400 group-hover:text-yellow-400 dark:group-hover:text-yellow-400">terminal</span>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-900 dark:text-slate-100 group-hover:text-black dark:group-hover:text-black">Code Block</span>
+<span class="text-[10px] text-slate-500 dark:text-slate-400 group-hover:text-black/70 dark:group-hover:text-black/70">Multi-language syntax highlight.</span>
+</div>
+</button>
+<button class="w-full text-left flex items-center gap-4 px-4 py-3 hover:bg-yellow-400 hover:text-black dark:hover:bg-yellow-400 dark:hover:text-black transition-colors group">
+<div class="w-10 h-10 bg-neutral-100 dark:bg-black border border-neutral-200 dark:border-neutral-800 flex items-center justify-center group-hover:bg-black group-hover:border-black dark:group-hover:bg-black dark:group-hover:border-black transition-colors">
+<span class="material-symbols-outlined text-[20px] text-slate-500 dark:text-slate-400 group-hover:text-yellow-400 dark:group-hover:text-yellow-400">table_chart</span>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-900 dark:text-slate-100 group-hover:text-black dark:group-hover:text-black">Data Table</span>
+<span class="text-[10px] text-slate-500 dark:text-slate-400 group-hover:text-black/70 dark:group-hover:text-black/70">CSV import or manual entry.</span>
+</div>
+</button>
+<div class="h-px bg-neutral-200 dark:bg-neutral-800 my-1 mx-4"></div>
+<div class="p-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Basic blocks</div>
+<button class="w-full text-left flex items-center gap-4 px-4 py-3 hover:bg-yellow-400 hover:text-black dark:hover:bg-yellow-400 dark:hover:text-black transition-colors group">
+<div class="w-10 h-10 bg-neutral-100 dark:bg-black border border-neutral-200 dark:border-neutral-800 flex items-center justify-center group-hover:bg-black group-hover:border-black dark:group-hover:bg-black dark:group-hover:border-black transition-colors">
+<span class="material-symbols-outlined text-[20px] text-slate-500 dark:text-slate-400 group-hover:text-yellow-400 dark:group-hover:text-yellow-400">text_fields</span>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-slate-900 dark:text-slate-100 group-hover:text-black dark:group-hover:text-black">Text</span>
+<span class="text-[10px] text-slate-500 dark:text-slate-400 group-hover:text-black/70 dark:group-hover:text-black/70">Start writing with plain text.</span>
+</div>
+</button>
+</div>
+</div>
+</div>
+</div>
+<div class="absolute bottom-6 right-6 md:hidden">
+<button class="w-14 h-14 bg-yellow-400 text-black rounded-full shadow-lg flex items-center justify-center hover:bg-yellow-500 transition-colors">
+<span class="material-symbols-outlined">edit</span>
+</button>
+</div>
+</div>
+<aside class="w-80 border-l border-slate-200 dark:border-border-dark bg-white dark:bg-black hidden xl:flex flex-col overflow-y-auto z-20">
+<div class="p-6 border-b border-slate-200 dark:border-border-dark">
+<div class="flex gap-2">
+<button class="flex-1 bg-black dark:bg-white hover:bg-neutral-800 dark:hover:bg-neutral-200 text-white dark:text-black font-bold py-2 px-4 shadow-lg text-sm transition-all uppercase tracking-wider">
+                        Deploy Post
+                    </button>
+<button class="bg-white dark:bg-black border border-slate-200 dark:border-border-dark hover:bg-slate-50 dark:hover:bg-neutral-900 text-slate-600 dark:text-slate-300 p-2 transition-colors">
+<span class="material-symbols-outlined text-[20px]">calendar_today</span>
+</button>
+</div>
+<div class="mt-4 flex items-center justify-between text-xs text-slate-500 font-mono uppercase">
+<span>1,240 words</span>
+<span>~8 min read</span>
+</div>
+</div>
+<div class="p-6 space-y-8">
+<div>
+<h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2 font-mono">
+<span class="material-symbols-outlined text-[14px]">tune</span>
+                        Post Config
+                    </h3>
+<div class="space-y-4">
+<label class="block">
+<span class="text-[10px] font-bold text-slate-700 dark:text-slate-300 mb-1 block uppercase tracking-wider">Slug</span>
+<div class="flex items-center bg-white dark:bg-black border border-slate-200 dark:border-border-dark px-3 py-2 focus-within:border-yellow-400 focus-within:ring-1 focus-within:ring-yellow-400 transition-all">
+<span class="text-slate-400 text-xs mr-1 font-mono">/eng/</span>
+<input class="bg-transparent border-none p-0 text-sm w-full text-slate-900 dark:text-slate-100 focus:ring-0 font-mono" type="text" value="scaling-vector-dbs"/>
+</div>
+</label>
+<label class="block">
+<span class="text-[10px] font-bold text-slate-700 dark:text-slate-300 mb-1 block uppercase tracking-wider">TL;DR (Excerpt)</span>
+<textarea class="w-full bg-white dark:bg-black border border-slate-200 dark:border-border-dark text-sm text-slate-900 dark:text-slate-100 focus:border-yellow-400 focus:ring-yellow-400 h-24 resize-none placeholder-slate-500 leading-relaxed p-3" placeholder="Abstract...">Comparison of Qdrant vs Pinecone for high-scale RAG systems.</textarea>
+</label>
+</div>
+</div>
+<div>
+<h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2 font-mono">
+<span class="material-symbols-outlined text-[14px]">sell</span>
+                        Tags
+                    </h3>
+<div class="space-y-4">
+<div class="flex flex-wrap gap-2 mb-2">
+<span class="inline-flex items-center gap-1 px-2 py-1 text-xs font-bold bg-neutral-100 dark:bg-neutral-900 text-black dark:text-white border border-neutral-200 dark:border-neutral-800 font-mono uppercase">
+                                #vector-search
+                                <button class="hover:text-yellow-500 rounded-full transition-colors"><span class="material-symbols-outlined text-[12px]">close</span></button>
+</span>
+<span class="inline-flex items-center gap-1 px-2 py-1 text-xs font-bold bg-neutral-100 dark:bg-neutral-900 text-black dark:text-white border border-neutral-200 dark:border-neutral-800 font-mono uppercase">
+                                #system-design
+                                <button class="hover:text-yellow-500 rounded-full transition-colors"><span class="material-symbols-outlined text-[12px]">close</span></button>
+</span>
+</div>
+<input class="w-full bg-transparent border-b border-slate-200 dark:border-neutral-800 text-sm py-1 px-0 focus:ring-0 focus:border-yellow-400 placeholder-slate-400 font-mono" placeholder="+ Add tag" type="text"/>
+</div>
+</div>
+<div>
+<h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2 font-mono">
+<span class="material-symbols-outlined text-[14px]">fact_check</span>
+                        Review Status
+                    </h3>
+<div class="bg-white dark:bg-black border border-slate-200 dark:border-border-dark p-4">
+<div class="flex items-center justify-between mb-3">
+<span class="text-sm font-medium text-slate-700 dark:text-slate-300">Technical Accuracy</span>
+<span class="text-[10px] font-bold text-black bg-green-400 px-1.5 py-0.5 uppercase tracking-wider">Passed</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-sm font-medium text-slate-700 dark:text-slate-300">Grammar/Style</span>
+<span class="text-[10px] font-bold text-black bg-yellow-400 px-1.5 py-0.5 uppercase tracking-wider">Pending</span>
+</div>
+</div>
+</div>
+</div>
+</aside>
+</main>
+
+</body></html>

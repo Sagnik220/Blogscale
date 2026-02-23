@@ -1,0 +1,228 @@
+.custom-scrollbar::-webkit-scrollbar {
+    height: 6px;
+    width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #0d0d0d;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #333333;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #FFD700;
+}
+
+.article-content {
+    color: #111111;
+    font-family: var(--font-space);
+}
+
+.article-content p {
+    margin-bottom: 1.5em;
+    line-height: 1.8;
+    font-size: 1.125rem;
+    color: #111111;
+}
+
+.article-content h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #000000;
+    margin-top: 2.5em;
+    margin-bottom: 0.8em;
+    letter-spacing: -0.03em;
+    scroll-margin-top: 100px;
+    border-bottom: 4px solid #FFD700;
+    display: inline-block;
+    padding-bottom: 4px;
+}
+
+.article-content h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #000000;
+    margin-top: 2em;
+    margin-bottom: 0.75em;
+    scroll-margin-top: 100px;
+}
+
+.article-content ul {
+    list-style-type: square;
+    padding-left: 1.5em;
+    margin-bottom: 1.5em;
+    color: #111111;
+}
+
+.article-content li::marker {
+    color: #FFD700;
+}
+
+.article-content li {
+    margin-bottom: 0.5em;
+}
+
+.article-content blockquote {
+    border-left: 6px solid #FFD700;
+    background-color: #F9F9F9;
+    padding: 1.5rem;
+    font-style: italic;
+    margin: 2rem 0;
+    color: #333;
+}
+
+.article-content pre {
+    background-color: #0D0D0D !important;
+    padding: 1.5rem;
+    border: 2px solid #000;
+    box-shadow: 4px 4px 0 #FFD700;
+    overflow-x: auto;
+    margin-bottom: 2rem;
+}
+
+.article-content code {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.875rem;
+    color: #fff;
+}
+
+.article-content p code {
+    background-color: #F9F9F9;
+    color: #000;
+    padding: 0.2rem 0.4rem;
+    border: 1px solid #E5E5E5;
+    font-size: 0.9em;
+}
+
+/* UI Elements from Stitch Design */
+
+.nav-link-black {
+    color: #000;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all 0.2s;
+    text-decoration: none;
+}
+
+.nav-link-black:hover {
+    background: #000;
+    color: #FFD700;
+}
+
+.btn-icon:hover {
+    color: #FFD700 !important;
+}
+
+.btn-subscribe-black {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #000;
+    border: 2px solid #000;
+    padding: 0.5rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #FFD700;
+    box-shadow: 4px 4px 0px rgba(255, 215, 0, 1);
+    transition: transform 0.1s, box-shadow 0.1s;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.btn-subscribe-black:hover {
+    transform: translate(-0.125rem, -0.125rem);
+    box-shadow: 6px 6px 0px rgba(255, 215, 0, 1);
+}
+
+.btn-subscribe-black:active {
+    transform: translate(0, 0);
+    box-shadow: none;
+}
+
+.btn-social {
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #000;
+    background: #fff;
+    color: #000;
+    transition: all 0.2s;
+    box-shadow: 3px 3px 0px rgba(0, 0, 0, 1);
+    cursor: pointer;
+}
+
+.group:hover .btn-social {
+    background: #000;
+    color: #FFD700;
+    box-shadow: none;
+    transform: translate(3px, 3px);
+}
+
+.btn-social:hover {
+    background: #000;
+    color: #FFD700;
+    box-shadow: none;
+    transform: translate(3px, 3px);
+}
+
+.btn-author-social {
+    background: #000;
+    color: #FFD700;
+    border: 1px solid #FFD700;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-author-social:hover {
+    background: #FFD700;
+    color: #000;
+}
+
+.next-article-card:hover {
+    border-color: #FFD700 !important;
+}
+
+.next-article-card:hover .card-img {
+    filter: grayscale(0) !important;
+}
+
+.next-article-card:hover h3 {
+    color: #FFD700 !important;
+}
+
+@media (min-width: 1280px) {
+    .xl-flex {
+        display: flex !important;
+    }
+
+    .xl-block {
+        display: block !important;
+    }
+}
+
+@media (max-width: 1280px) {
+    .main-padding {
+        padding: 4rem 2.5rem !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-padding {
+        padding: 3rem 1.5rem !important;
+    }
+
+    .header-padding {
+        padding: 0 1.5rem !important;
+    }
+}

@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Vibrant Technical Article View</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#FFD700","secondary": "#000000",
+                        "accent": "#FFEA00",
+                        "background-light": "#FFFFFF",
+                        "background-dark": "#000000",
+                        "surface-light": "#F9F9F9",
+                        "surface-dark": "#111111",
+                        "border-light": "#E5E5E5",
+                        "border-dark": "#333333",
+                        "code-bg": "#0D0D0D"
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "body": ["Space Grotesk", "sans-serif"],
+                        "mono": ["ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", "monospace"]
+                    },
+                    borderRadius: { "DEFAULT": "0px", "lg": "0px", "xl": "0px", "2xl": "0px", "full": "9999px" },},
+            },
+        }
+    </script>
+<style>
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 6px;
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0d0d0d;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #333333;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #FFD700;
+        }
+        .article-content p {
+            margin-bottom: 1.5em;
+            line-height: 1.8;
+            font-size: 1.125rem;
+            color: #111111;
+        }
+        .article-content h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #000000;
+            margin-top: 2.5em;
+            margin-bottom: 0.8em;
+            letter-spacing: -0.03em;
+            scroll-margin-top: 100px;
+            border-bottom: 4px solid #FFD700;
+            display: inline-block;
+            padding-bottom: 4px;
+        }
+        .article-content h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #000000;
+            margin-top: 2em;
+            margin-bottom: 0.75em;
+            scroll-margin-top: 100px;
+        }
+        .article-content ul {
+            list-style-type: square;
+            padding-left: 1.5em;
+            margin-bottom: 1.5em;
+            color: #111111;
+        }
+        .article-content li::marker {
+            color: #FFD700;
+        }
+        .article-content li {
+            margin-bottom: 0.5em;
+        }
+        .article-content blockquote {
+            border-left: 6px solid #FFD700;
+            background-color: #F9F9F9;
+            padding: 1.5rem;
+            font-style: italic;
+            margin: 2rem 0;
+            color: #333;
+        }
+        .diagram-arrow-down {
+            width: 2px;
+            height: 24px;
+            background-color: #000000;
+            margin: 0 auto;
+            position: relative;
+        }
+        .diagram-arrow-down::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: -3px;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 6px solid #000000;
+        }.token-keyword { color: #FFD700; font-weight: bold; }
+        .token-function { color: #FFFFFF; }
+        .token-string { color: #A5A5A5; }
+        .token-comment { color: #555555; font-style: italic; }
+        .token-number { color: #FFD700; }
+        .token-type { color: #FFFFFF; text-decoration: underline; text-decoration-color: #FFD700; }
+    </style>
+</head>
+<body class="bg-white text-black font-display antialiased min-h-screen flex flex-col overflow-x-hidden">
+<div class="fixed top-0 left-0 w-full z-50 h-1.5 bg-transparent">
+<div class="h-full bg-primary transition-all duration-300 ease-out shadow-[0_0_10px_rgba(255,215,0,0.5)]" style="width: 45%;"></div>
+</div>
+<header class="sticky top-0 z-40 w-full border-b-2 border-black bg-white/95 backdrop-blur-md transition-all">
+<div class="mx-auto flex h-20 max-w-[1400px] items-center justify-between px-4 sm:px-6 lg:px-8">
+<div class="flex items-center gap-12">
+<a class="flex items-center gap-3 text-black transition hover:opacity-70" href="#">
+<div class="size-8 text-black bg-primary p-1.5 shadow-[4px_4px_0px_rgba(0,0,0,1)]">
+<svg class="w-full h-full" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+<path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="square" stroke-linejoin="miter"></path>
+</svg>
+</div>
+<span class="text-2xl font-black tracking-tighter uppercase">System<span class="bg-black text-primary px-1">Design</span></span>
+</a>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-black hover:bg-black hover:text-primary px-3 py-1 text-sm font-bold uppercase tracking-wider transition-all" href="#">Interviews</a>
+<a class="text-black hover:bg-black hover:text-primary px-3 py-1 text-sm font-bold uppercase tracking-wider transition-all" href="#">Architecture</a>
+<a class="text-black hover:bg-black hover:text-primary px-3 py-1 text-sm font-bold uppercase tracking-wider transition-all" href="#">Algorithms</a>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<button class="text-black hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-3xl">search</span>
+</button>
+<div class="h-8 w-0.5 bg-black"></div>
+<button class="hidden sm:flex items-center gap-2 border-2 border-black bg-white px-6 py-2 text-sm font-bold text-black shadow-[4px_4px_0px_rgba(0,0,0,1)] transition-transform hover:-translate-y-0.5 hover:translate-x-0.5 hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] active:translate-y-0 active:translate-x-0 active:shadow-none">
+                Sign In
+            </button>
+<button class="hidden sm:flex items-center gap-2 bg-black border-2 border-black px-6 py-2 text-sm font-bold text-primary shadow-[4px_4px_0px_rgba(255,215,0,1)] transition-transform hover:-translate-y-0.5 hover:translate-x-0.5 hover:shadow-[2px_2px_0px_rgba(255,215,0,1)] active:translate-y-0 active:translate-x-0 active:shadow-none">
+                Subscribe
+            </button>
+</div>
+</div>
+</header>
+<main class="relative flex-grow w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-16 flex justify-between gap-16">
+<aside class="hidden xl:flex flex-col gap-8 sticky top-32 h-fit w-20 items-center border-r-2 border-black/5 pr-8">
+<div class="flex flex-col items-center gap-2 group cursor-pointer w-full">
+<button class="w-12 h-12 flex items-center justify-center border-2 border-black bg-white text-black hover:bg-black hover:text-primary transition-all shadow-[3px_3px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px]">
+<span class="material-symbols-outlined">thumb_up</span>
+</button>
+<span class="text-xs font-bold text-black">4.2k</span>
+</div>
+<div class="flex flex-col items-center gap-2 group cursor-pointer w-full">
+<button class="w-12 h-12 flex items-center justify-center border-2 border-black bg-white text-black hover:bg-black hover:text-primary transition-all shadow-[3px_3px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px]">
+<span class="material-symbols-outlined">chat_bubble</span>
+</button>
+<span class="text-xs font-bold text-black">128</span>
+</div>
+<div class="w-8 h-0.5 bg-black my-2"></div>
+<button class="w-12 h-12 flex items-center justify-center border-2 border-black bg-white text-black hover:bg-black hover:text-white transition-all shadow-[3px_3px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px]">
+<span class="material-symbols-outlined">bookmark</span>
+</button>
+<button class="w-12 h-12 flex items-center justify-center border-2 border-black bg-white text-black hover:bg-black hover:text-white transition-all shadow-[3px_3px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px]">
+<span class="material-symbols-outlined">share</span>
+</button>
+</aside>
+<article class="w-full max-w-[820px] flex flex-col mx-auto xl:mx-0">
+<header class="mb-12">
+<div class="flex gap-3 mb-8">
+<span class="px-4 py-1.5 bg-primary text-black text-xs font-bold uppercase tracking-widest border-2 border-black shadow-[2px_2px_0px_rgba(0,0,0,1)]">System Design</span>
+<span class="px-4 py-1.5 bg-white text-black text-xs font-bold uppercase tracking-widest border-2 border-black shadow-[2px_2px_0px_rgba(0,0,0,1)]">Data Engineering</span>
+</div>
+<h1 class="text-5xl md:text-6xl lg:text-7xl font-black text-black leading-[1.05] tracking-tighter mb-10 decoration-primary underline decoration-8 underline-offset-4">
+                Designing a Real-Time Analytics Pipeline for Scale
+            </h1>
+<div class="flex items-center justify-between border-y-2 border-black py-6 bg-surface-light">
+<div class="flex items-center gap-5 px-4">
+<div class="relative">
+<img alt="Portrait of the author Alex Dev" class="w-14 h-14 object-cover border-2 border-black shadow-[3px_3px_0px_rgba(255,215,0,1)]" data-alt="Portrait of the author Alex Dev" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQT3n34InXzLjExJkKePie9J31oP_F5xP7NHXd0E1R6ltwFr-Yw1uUb2LVLe6A8o5ERua0PKVqmmmumxXD3R211oWa6dmt98vtCuD1AsokULWuReRz3nXhvhQlh8HTzTukgNF9sw1PI8sRkX7w_wy-J8BTvIjeWUSS_pCcmLI_SCSf9-utgNRpzzkS03hwo8I7aQn4HbVdeFIPei3LZY5QWEhX7LtMgcDD_Bkv0zTUf6J78iImpQByQnC1BVACCA8ao6U2zNSyAqMC"/>
+<div class="absolute -top-1 -right-1 w-4 h-4 bg-green-500 border-2 border-black"></div>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="text-black font-bold text-lg uppercase tracking-wide">Sarah Engineer</span>
+<span class="text-blue-600 text-xs material-symbols-outlined" style="font-size: 18px;">verified</span>
+</div>
+<span class="text-gray-600 text-sm font-medium">Principal Data Engineer @ TechCorp</span>
+</div>
+</div>
+<div class="flex flex-col items-end gap-1 px-4">
+<span class="text-black text-sm font-bold uppercase">Nov 14, 2024</span>
+<span class="text-black bg-primary px-2 py-0.5 text-xs font-bold border border-black flex items-center gap-1 shadow-[2px_2px_0px_rgba(0,0,0,1)]">
+<span class="material-symbols-outlined text-sm">schedule</span> 15 min read
+                    </span>
+</div>
+</div>
+</header>
+<figure class="w-full mb-16 relative group">
+<div class="border-2 border-black shadow-[8px_8px_0px_rgba(0,0,0,1)] bg-black overflow-hidden relative">
+<img alt="Abstract digital server room showing blue neon lights" class="w-full h-auto object-cover aspect-[21/9] opacity-90 group-hover:opacity-100 transition-opacity grayscale hover:grayscale-0" data-alt="Abstract digital server room showing blue neon lights" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDByY1dBnKKzt9z_7EkIzpyepSX6ysZ1T-6LhJwn2URzsZXU-VCwCHWmgQBWmyTcBR9cl5mWgR5h_O8_tN55b10wMFDSf-__Qp9bMNvIAO-rZK8ShlYvN1oWjU-yfZaxyNsBu4Qb_ENTwSdXQ8PZtd1m92q4LGKOUuB2qEtscSeEbNl6-i5kz1vSjQ_er7YlhNTopRioW6tZKwkH_ymPU1S54eqVA0_DT-IQLSxsXC0p4-6jXtHa4JziWQXEYbRZvaxtMLFwRHW_j_n"/>
+<div class="absolute inset-0 bg-primary mix-blend-multiply opacity-20 group-hover:opacity-0 transition-opacity"></div>
+</div>
+<figcaption class="text-right text-black text-xs font-bold uppercase mt-3 tracking-widest border-r-4 border-primary pr-3 inline-block float-right">
+                Architecture overview of high-throughput systems
+            </figcaption>
+</figure>
+<div class="article-content">
+<p>
+<span class="float-left text-7xl font-black text-black bg-primary px-2 mr-4 mt-[-10px] border-2 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)]">W</span>hen designing data pipelines that need to ingest millions of events per second, the margin for error is razor-thin. In this technical deep dive, we'll explore how to architect a robust real-time analytics system using Kafka, Flink, and ClickHouse. This is based on a real-world system design interview question I encountered at a FAANG company.
+            </p>
+<p>
+                The core challenge lies in handling backpressure while maintaining exactly-once processing semantics. Let's break down the data flow before diving into the implementation details.
+            </p>
+<blockquote class="text-xl font-medium border-l-8 border-primary bg-surface-light p-8 my-10 shadow-inner">
+                "A standard lambda architecture is often too complex to maintain. Instead, we propose a Kappa architecture where all data flows through a single stream processing layer."
+            </blockquote>
+<h2 id="high-level-architecture">High-Level Architecture</h2>
+<p>
+                We simplify the stack to reduce operational overhead. Below is the proposed Kappa architecture diagram.
+            </p>
+<div class="my-12 p-8 bg-surface-light border-2 border-black shadow-[6px_6px_0px_rgba(0,0,0,1)] relative overflow-hidden group">
+<div class="absolute top-0 left-0 px-4 py-1.5 bg-black text-primary text-xs font-bold uppercase tracking-widest border-b-2 border-r-2 border-black">System Design Diagram</div>
+<div class="flex flex-col md:flex-row items-center justify-between gap-4 relative z-10 pt-8">
+<div class="flex flex-col items-center gap-3 w-32 group/item">
+<div class="w-20 h-20 bg-white border-2 border-black flex items-center justify-center shadow-[4px_4px_0px_rgba(0,0,0,1)] group-hover/item:shadow-none group-hover/item:translate-x-[2px] group-hover/item:translate-y-[2px] transition-all">
+<span class="material-symbols-outlined text-4xl text-black">api</span>
+</div>
+<span class="text-sm font-bold text-black uppercase tracking-wide bg-primary px-1">API Gateway</span>
+</div>
+<div class="flex-1 h-0.5 bg-black relative w-full md:w-auto flex justify-center items-center">
+<div class="absolute -top-6 px-2 py-0.5 bg-black text-white text-[10px] uppercase tracking-widest font-bold">Protobuf</div>
+<span class="material-symbols-outlined absolute -right-3 text-black text-2xl bg-surface-light">arrow_forward_ios</span>
+</div>
+<div class="flex flex-col items-center gap-3 w-32 group/item">
+<div class="w-20 h-20 bg-white border-2 border-black flex items-center justify-center shadow-[4px_4px_0px_rgba(0,0,0,1)] group-hover/item:shadow-none group-hover/item:translate-x-[2px] group-hover/item:translate-y-[2px] transition-all">
+<span class="material-symbols-outlined text-4xl text-black">queue_music</span>
+</div>
+<span class="text-sm font-bold text-black uppercase tracking-wide bg-primary px-1">Kafka</span>
+</div>
+<div class="flex-1 h-0.5 bg-black relative w-full md:w-auto flex justify-center items-center">
+<div class="absolute -top-6 px-2 py-0.5 bg-black text-white text-[10px] uppercase tracking-widest font-bold">Stream</div>
+<span class="material-symbols-outlined absolute -right-3 text-black text-2xl bg-surface-light">arrow_forward_ios</span>
+</div>
+<div class="flex flex-col items-center gap-3 w-32 group/item">
+<div class="w-20 h-20 bg-white border-2 border-black flex items-center justify-center shadow-[4px_4px_0px_rgba(0,0,0,1)] group-hover/item:shadow-none group-hover/item:translate-x-[2px] group-hover/item:translate-y-[2px] transition-all">
+<span class="material-symbols-outlined text-4xl text-black">memory</span>
+</div>
+<span class="text-sm font-bold text-black uppercase tracking-wide bg-primary px-1">Flink</span>
+</div>
+<div class="flex-1 h-0.5 bg-black relative w-full md:w-auto flex justify-center items-center">
+<div class="absolute -top-6 px-2 py-0.5 bg-black text-white text-[10px] uppercase tracking-widest font-bold">Batch</div>
+<span class="material-symbols-outlined absolute -right-3 text-black text-2xl bg-surface-light">arrow_forward_ios</span>
+</div>
+<div class="flex flex-col items-center gap-3 w-32 group/item">
+<div class="w-20 h-20 bg-white border-2 border-black flex items-center justify-center shadow-[4px_4px_0px_rgba(0,0,0,1)] group-hover/item:shadow-none group-hover/item:translate-x-[2px] group-hover/item:translate-y-[2px] transition-all">
+<span class="material-symbols-outlined text-4xl text-black">storage</span>
+</div>
+<span class="text-sm font-bold text-black uppercase tracking-wide bg-primary px-1">ClickHouse</span>
+</div>
+</div>
+<div class="mt-8 pt-4 border-t-2 border-dashed border-black/20">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-black bg-primary rounded-full p-0.5 text-sm mt-0.5 border border-black">info</span>
+<p class="!text-sm !m-0 text-gray-700 font-mono">
+<strong>Architecture Note:</strong> The Flink job handles stateful aggregations (windowing) before writing to the OLAP store to reduce write amplification.
+                        </p>
+</div>
+</div>
+</div>
+<h2 id="ingestion-layer">Ingestion Layer Implementation</h2>
+<p>
+                For the ingestion layer, we use Go due to its excellent concurrency primitives. The goal is to accept JSON payloads, validate them, and push to Kafka.
+            </p>
+<div class="my-10 border-2 border-black bg-code-bg shadow-[8px_8px_0px_rgba(0,0,0,1)] group">
+<div class="flex items-center justify-between px-4 py-3 bg-black border-b border-gray-800">
+<div class="flex items-center gap-3">
+<span class="flex items-center justify-center px-2 py-0.5 bg-primary text-black text-[10px] font-black tracking-widest">GO</span>
+<span class="text-xs text-gray-400 font-mono">producer.go</span>
+</div>
+<button class="opacity-0 group-hover:opacity-100 flex items-center gap-1.5 text-xs font-bold text-white hover:text-primary transition-all uppercase tracking-wider">
+<span class="material-symbols-outlined text-[16px]">content_copy</span>
+                        Copy
+                    </button>
+</div>
+<div class="p-6 overflow-x-auto custom-scrollbar">
+<pre><code class="font-mono text-sm leading-relaxed text-gray-300">
+<span class="token-keyword">func</span> <span class="token-function">ProduceEvent</span>(ctx context.Context, topic <span class="token-type">string</span>, event Event) <span class="token-type">error</span> {
+    payload, err := json.<span class="token-function">Marshal</span>(event)
+    <span class="token-keyword">if</span> err != <span class="token-keyword">nil</span> {
+        <span class="token-keyword">return</span> fmt.<span class="token-function">Errorf</span>(<span class="token-string">"failed to marshal event: %w"</span>, err)
+    }
+    msg := &amp;kafka.Message{
+        TopicPartition: kafka.TopicPartition{Topic: &amp;topic, Partition: kafka.PartitionAny},
+        Value:          payload,
+        Key:            []<span class="token-type">byte</span>(event.UserID), <span class="token-comment">// Ensure ordering by UserID</span>
+    }
+    <span class="token-keyword">return</span> producer.<span class="token-function">Produce</span>(msg, <span class="token-keyword">nil</span>)
+}
+</code></pre>
+</div>
+</div>
+<h2 id="processing-data">Processing Logic</h2>
+<p>
+                Once data is in Kafka, we need to process it. Python is excellent for defining the transformation logic, especially with libraries like PyFlink or Faust.
+            </p>
+<div class="my-10 border-2 border-black bg-code-bg shadow-[8px_8px_0px_rgba(0,0,0,1)] group">
+<div class="flex items-center justify-between px-4 py-3 bg-black border-b border-gray-800">
+<div class="flex items-center gap-3">
+<span class="flex items-center justify-center px-2 py-0.5 bg-primary text-black text-[10px] font-black tracking-widest">PY</span>
+<span class="text-xs text-gray-400 font-mono">processor.py</span>
+</div>
+<button class="opacity-0 group-hover:opacity-100 flex items-center gap-1.5 text-xs font-bold text-white hover:text-primary transition-all uppercase tracking-wider">
+<span class="material-symbols-outlined text-[16px]">content_copy</span>
+                        Copy
+                    </button>
+</div>
+<div class="p-6 overflow-x-auto custom-scrollbar">
+<pre><code class="font-mono text-sm leading-relaxed text-gray-300">
+<span class="token-keyword">from</span> pyflink.datastream <span class="token-keyword">import</span> StreamExecutionEnvironment
+<span class="token-keyword">from</span> pyflink.table <span class="token-keyword">import</span> StreamTableEnvironment
+<span class="token-keyword">def</span> <span class="token-function">process_stream</span>():
+    env = StreamExecutionEnvironment.get_execution_environment()
+    t_env = StreamTableEnvironment.create(env)
+    <span class="token-comment"># Define source table from Kafka</span>
+    t_env.execute_sql(<span class="token-string">"""
+        CREATE TABLE source_events (
+            user_id STRING,
+            event_type STRING,
+            ts TIMESTAMP(3),
+            WATERMARK FOR ts AS ts - INTERVAL '5' SECOND
+        ) WITH (
+            'connector' = 'kafka',
+            'topic' = 'raw_events',
+            'format' = 'json'
+        )
+    """</span>)
+</code></pre>
+</div>
+</div>
+<h2 id="storage-strategy">Storage &amp; Query Strategy</h2>
+<p>
+                Finally, we persist the aggregated data into ClickHouse. The schema design is crucial for query performance. We use a `MergeTree` engine partitioned by date.
+            </p>
+<div class="my-12 bg-white border-2 border-black shadow-[8px_8px_0px_rgba(0,0,0,1)] overflow-hidden">
+<div class="bg-black px-4 py-3 border-b-2 border-black flex items-center justify-between">
+<span class="text-xs font-bold text-primary uppercase tracking-widest">Data Flow Visualization</span>
+<div class="flex gap-2">
+<div class="h-2 w-2 bg-primary"></div>
+<div class="h-2 w-2 bg-white"></div>
+<div class="h-2 w-2 bg-gray-500"></div>
+</div>
+</div>
+<div class="p-8 relative">
+<div class="absolute inset-0" style="background-image: radial-gradient(#ddd 1px, transparent 1px); background-size: 20px 20px;"></div>
+<div class="relative z-10 flex flex-col gap-6">
+<div class="flex items-center gap-5 p-4 bg-white border-2 border-black shadow-[4px_4px_0px_rgba(0,0,0,0.1)]">
+<div class="w-10 h-10 bg-black text-primary flex items-center justify-center font-black text-xl">1</div>
+<div class="flex-1">
+<h4 class="text-sm font-bold text-black uppercase tracking-wide">Ingest</h4>
+<div class="w-full bg-gray-200 h-2 mt-2 border border-black">
+<div class="bg-black h-full w-[80%]"></div>
+</div>
+</div>
+<span class="text-sm font-mono font-bold text-black bg-primary px-2">25k/sec</span>
+</div>
+<div class="diagram-arrow-down"></div>
+<div class="flex items-center gap-5 p-4 bg-white border-2 border-black shadow-[4px_4px_0px_rgba(0,0,0,0.1)]">
+<div class="w-10 h-10 bg-primary text-black border-2 border-black flex items-center justify-center font-black text-xl">2</div>
+<div class="flex-1">
+<h4 class="text-sm font-bold text-black uppercase tracking-wide">Transform &amp; Aggregate</h4>
+<div class="w-full bg-gray-200 h-2 mt-2 border border-black">
+<div class="bg-primary h-full w-[60%] border-r-2 border-black"></div>
+</div>
+</div>
+<span class="text-sm font-mono font-bold text-black bg-gray-200 px-2 border border-black">Processing...</span>
+</div>
+<div class="diagram-arrow-down"></div>
+<div class="flex items-center gap-5 p-4 bg-white border-2 border-black shadow-[4px_4px_0px_rgba(0,0,0,0.1)]">
+<div class="w-10 h-10 bg-white border-2 border-black text-black flex items-center justify-center font-black text-xl">3</div>
+<div class="flex-1">
+<h4 class="text-sm font-bold text-black uppercase tracking-wide">Persist</h4>
+<div class="w-full bg-gray-200 h-2 mt-2 border border-black">
+<div class="bg-black h-full w-[45%]"></div>
+</div>
+</div>
+<span class="text-sm font-mono font-bold text-gray-500 bg-gray-100 px-2 border border-gray-300">Compressed</span>
+</div>
+</div>
+</div>
+</div>
+<div class="my-10 border-2 border-black bg-code-bg shadow-[8px_8px_0px_rgba(0,0,0,1)] group">
+<div class="flex items-center justify-between px-4 py-3 bg-black border-b border-gray-800">
+<div class="flex items-center gap-3">
+<span class="flex items-center justify-center px-2 py-0.5 bg-primary text-black text-[10px] font-black tracking-widest">SQL</span>
+<span class="text-xs text-gray-400 font-mono">clickhouse_schema.sql</span>
+</div>
+<button class="opacity-0 group-hover:opacity-100 flex items-center gap-1.5 text-xs font-bold text-white hover:text-primary transition-all uppercase tracking-wider">
+<span class="material-symbols-outlined text-[16px]">content_copy</span>
+                        Copy
+                    </button>
+</div>
+<div class="p-6 overflow-x-auto custom-scrollbar">
+<pre><code class="font-mono text-sm leading-relaxed text-gray-300">
+<span class="token-keyword">CREATE TABLE</span> analytics.user_activity (
+    timestamp <span class="token-type">DateTime</span>,
+    user_id <span class="token-type">UInt64</span>,
+    event_type <span class="token-type">LowCardinality(String)</span>,
+    duration_ms <span class="token-type">UInt32</span>,
+    meta_data <span class="token-type">Map(String, String)</span>
+)
+<span class="token-keyword">ENGINE</span> = MergeTree()
+<span class="token-keyword">PARTITION BY</span> toYYYYMM(timestamp)
+<span class="token-keyword">ORDER BY</span> (event_type, timestamp, user_id)
+<span class="token-keyword">TTL</span> timestamp + <span class="token-keyword">INTERVAL</span> <span class="token-number">1</span> YEAR;
+</code></pre>
+</div>
+</div>
+<h3>Conclusion</h3>
+<p>
+                Designing scalable systems is about understanding trade-offs. By decoupling ingestion from processing and choosing the right storage engine, we achieved a throughput of 1M events/sec with sub-second latency.
+            </p>
+</div>
+<div class="mt-16 pt-8 border-t-2 border-black flex flex-wrap gap-3">
+<span class="text-sm font-bold text-black uppercase tracking-widest mr-2 py-1.5">Tags:</span>
+<a class="px-3 py-1.5 bg-white text-black text-sm font-bold border-2 border-black hover:bg-black hover:text-white transition-all shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[1px] hover:translate-y-[1px]" href="#">#SystemDesign</a>
+<a class="px-3 py-1.5 bg-white text-black text-sm font-bold border-2 border-black hover:bg-black hover:text-white transition-all shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[1px] hover:translate-y-[1px]" href="#">#DataEngineering</a>
+<a class="px-3 py-1.5 bg-white text-black text-sm font-bold border-2 border-black hover:bg-black hover:text-white transition-all shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[1px] hover:translate-y-[1px]" href="#">#Kafka</a>
+<a class="px-3 py-1.5 bg-white text-black text-sm font-bold border-2 border-black hover:bg-black hover:text-white transition-all shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[1px] hover:translate-y-[1px]" href="#">#ClickHouse</a>
+</div>
+<div class="mt-16 p-8 bg-black border-2 border-black flex flex-col sm:flex-row items-center sm:items-start gap-8 text-center sm:text-left relative shadow-[8px_8px_0px_rgba(255,215,0,1)]">
+<div class="relative">
+<img alt="Alex Dev" class="w-24 h-24 object-cover border-4 border-primary shadow-lg" data-alt="Alex Dev" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCV4JbSFWEtMjCBe1UTvvcPuh-lYOKMKQbS6OG-J0A217dT0oKkAL5iVjxHP5y1ySH1YCZU8yj5O-pQVmiIJSJln9edgAUENJeA0X5jXrubaRsQQGv-WvXmtzLqUGESIpwUXHHQBysrr6B3eiRdIFOyXbo24SGprrtlhy0qQVWamhI6Q1Ibmfj30y6z3__Q0wMneweTpei2MeGXU4qm3MSNumebgUOwkqW_RGDxkFNnXcyrzIE3Zz0jBFaM2C42PIhAYwGSBBm4ByO2"/>
+</div>
+<div class="flex-1">
+<h4 class="text-primary font-black text-xl mb-3 uppercase tracking-widest">Written by Sarah Engineer</h4>
+<p class="text-gray-300 text-sm leading-relaxed mb-6 font-medium">
+                    Sarah is a Principal Data Engineer specializing in distributed systems. She writes about system design, scaling data pipelines, and surviving on-call rotations.
+                </p>
+<button class="text-sm font-bold text-black bg-primary border-2 border-primary hover:bg-white hover:text-black hover:border-white px-6 py-2 transition-all uppercase tracking-wide">
+                    Follow Author
+                </button>
+</div>
+</div>
+</article>
+<aside class="hidden xl:block w-72 sticky top-32 h-fit">
+<div class="border-l-4 border-gray-200 pl-6 py-2">
+<h3 class="text-sm font-black text-black uppercase tracking-widest mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">toc</span>
+                Contents
+            </h3>
+<div class="flex flex-col gap-4">
+<a class="text-sm text-black font-bold border-l-4 border-primary -ml-[28px] pl-6 transition-all" href="#high-level-architecture">
+                    High-Level Architecture
+                </a>
+<a class="text-sm text-gray-500 hover:text-black font-medium transition-colors" href="#ingestion-layer">
+                    Ingestion Layer
+                </a>
+<a class="text-sm text-gray-500 hover:text-black font-medium transition-colors" href="#processing-data">
+                    Processing Logic
+                </a>
+<a class="text-sm text-gray-500 hover:text-black font-medium transition-colors" href="#storage-strategy">
+                    Storage &amp; Query Strategy
+                </a>
+</div>
+</div>
+<div class="mt-12 p-6 border-2 border-black bg-primary shadow-[6px_6px_0px_rgba(0,0,0,1)]">
+<h4 class="text-black font-black text-lg mb-2 uppercase tracking-tighter">Weekly Newsletter</h4>
+<p class="text-xs text-black font-medium mb-4">Get the best system design case studies delivered to your inbox.</p>
+<input class="w-full bg-white border-2 border-black px-3 py-2 text-sm text-black focus:outline-none focus:ring-0 focus:border-black mb-3 placeholder:text-gray-400 font-bold" placeholder="email@example.com" type="email"/>
+<button class="w-full bg-black hover:bg-white hover:text-black border-2 border-black text-white text-xs font-bold uppercase tracking-widest py-3 transition-colors">
+                Subscribe
+            </button>
+</div>
+</aside>
+</main>
+<footer class="w-full border-t-2 border-black bg-black py-20">
+<div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+<h3 class="text-4xl font-black text-white mb-12 uppercase tracking-tighter decoration-primary underline decoration-4 underline-offset-8">Read Next</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<a class="group flex flex-col gap-4 h-full" href="#">
+<div class="w-full aspect-video border-2 border-white/20 overflow-hidden relative group-hover:border-primary transition-colors">
+<img alt="Close up of a mechanical keyboard" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-500 grayscale group-hover:grayscale-0" data-alt="Close up of a mechanical keyboard" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPH8TwhOD63wh61z8hY5bHFc6s0wLc2w8oyzcIJ4JrptBPi5v55RZBtXI3CrqrGm_UOYaLcA9_v-7o-8lU6P4IUTLtKxln5f9IbfsZQ7jGQ084mwlXcdt37fcU9ngrqbKYPctc374JRJ0DxOEiq0t6PsjztKLuOXp2CUz-6sIFU6RpLO3KCe2o0R53S3--g2uosKGwFlRT7t9SHIUSzj4vLjyCJVS5LEJVKijr8XVDpdhukd52pgwB5ayFl45v4bZDuN8ml5-zzcxB"/>
+<div class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity mix-blend-overlay"></div>
+</div>
+<div>
+<span class="text-primary text-xs font-bold uppercase tracking-widest bg-white/10 px-2 py-1">Interview</span>
+<h4 class="text-white text-xl font-bold mt-3 leading-tight group-hover:text-primary transition-colors">Uber Backend Interview Experience</h4>
+</div>
+</a>
+<a class="group flex flex-col gap-4 h-full" href="#">
+<div class="w-full aspect-video border-2 border-white/20 overflow-hidden relative group-hover:border-primary transition-colors">
+<img alt="Code on a computer screen" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-500 grayscale group-hover:grayscale-0" data-alt="Code on a computer screen" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUYgU0s3cGbb_kSgtM1c8lPy7LLqvhmU3jXLb0iwTfY0eyAZRuykbSl7cZjQgeLATS4_CswA43urCH6_BvWtGPkyXK7Gii2WpOrPXvKzDiscSwY09JMh1GtYtltn1_e-yZ54gNWy5GuSEGg2cHsExJmUWkp1EuONV-bHKVo-o_H8JayQha7X-vc5WYCgOYdaYIJhMSgHA-PqVuekyLBq_pwwH4JIvS2ZvIzYun2AbYim6Y-QB2LMYRKF4dyCt2NrnidQ5tapZuzPLc"/>
+<div class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity mix-blend-overlay"></div>
+</div>
+<div>
+<span class="text-primary text-xs font-bold uppercase tracking-widest bg-white/10 px-2 py-1">Database</span>
+<h4 class="text-white text-xl font-bold mt-3 leading-tight group-hover:text-primary transition-colors">Postgres vs MongoDB in 2024</h4>
+</div>
+</a>
+<a class="group flex flex-col gap-4 h-full" href="#">
+<div class="w-full aspect-video border-2 border-white/20 overflow-hidden relative group-hover:border-primary transition-colors">
+<img alt="Matrix style binary code rain" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-500 grayscale group-hover:grayscale-0" data-alt="Matrix style binary code rain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2ruVTzh3t86p681AgUycOaGm13naQs4N8ZaV6yyUyoDDblZtpdLG9DeXjf6WcS2AZJsVrHg8t8uUwnv9gk9W3SNWS_4y1MbmC7rcLDFWB6c7Gj2Jtskb8lbELJCQMzESosqSM8xFTodvPJIqiZkV4g6YsjSIR1aVDvGDPapDCR83CBHHQI27dcXsn4jsdCcd4TDQ8tzpVj_ouwaGj3txgxyII4vJltjFRS-N7yEblpXO4jA1xZDqMD1DI8wNrYg0_N2FDpILA90-B"/>
+<div class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity mix-blend-overlay"></div>
+</div>
+<div>
+<span class="text-primary text-xs font-bold uppercase tracking-widest bg-white/10 px-2 py-1">Security</span>
+<h4 class="text-white text-xl font-bold mt-3 leading-tight group-hover:text-primary transition-colors">Designing Secure Auth Services</h4>
+</div>
+</a>
+</div>
+</div>
+</footer>
+
+</body></html>
