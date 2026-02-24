@@ -7,7 +7,5 @@ compatibility_flags = ["nodejs_compat"]
 directory = ".open-next/assets"
 binding = "ASSETS"
 
-[vars]
-# NODE_VERSION = "22"
-# Add ONLY non-secret variables here if needed
-# Secrets should be managed in the Cloudflare Dashboard
+# Environment variables should be managed as SECRETS in the Cloudflare Dashboard
+# to prevent them from being overwritten during deployment.
