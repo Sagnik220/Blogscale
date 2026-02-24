@@ -25,8 +25,8 @@ export async function getAllBlogs(): Promise<Blog[]> {
         .order('created_at', { ascending: false });
 
     if (error) {
-        console.error('Error fetching blogs:', error);
-        throw error;
+        console.error('Error fetching blogs from Supabase:', error);
+        return []; // Return empty array instead of throwing to prevent page crash
     }
 
     return data as Blog[];
