@@ -3,7 +3,6 @@
 import { useEffect, useState, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { marked } from 'marked';
-import DOMAsh from 'dompurify'; // using as alias as 'dompurify' might not be available, wait it is imported above as DOMPurify
 import DOMPurify from 'dompurify';
 
 import './editor.css';
