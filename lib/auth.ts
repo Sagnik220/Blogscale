@@ -54,7 +54,7 @@ export async function deleteSession(token: string): Promise<void> {
 export async function verifyAdminCredentials(
     email: string,
     password: string
-): Promise<{ valid: boolean; userId: number | null }> {
+): Promise<{ valid: boolean; userId: number | null; error?: string }> {
     const { data: user, error } = await supabase
         .from('admin_users')
         .select('id, password_hash')
@@ -62,12 +62,15 @@ export async function verifyAdminCredentials(
         .single();
 
     if (error || !user) {
-        if (error) console.error('Supabase admin lookup error:', error);
-        return { valid: false, userId: null };
+        if (error) {
+            console.error('Supabase admin lookup error:', error);
+            return { valid: false, userId: null, error: `DB Error: ${error.message}` };
+        }
+        return { valid: false, userId: null, error: 'User not found in database. Did you run the seed command?' };
     }
 
     const isValid = await bcrypt.compare(password, user.password_hash);
-    return { valid: isValid, userId: isValid ? user.id : null };
+    return { valid: isValid, userId: isValid ? user.id : null, error: isValid ? undefined : 'Incorrect password' };
 }
 
 // ─── Rate Limiting ───

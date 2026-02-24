@@ -21,10 +21,13 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Email and password are required' }, { status: 400 });
         }
 
-        const { valid, userId } = await verifyAdminCredentials(email, password);
+        const { valid, userId, error: authError } = await verifyAdminCredentials(email, password);
 
         if (!valid || !userId) {
-            return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
+            return NextResponse.json({
+                error: authError || 'Invalid credentials',
+                debug: process.env.NODE_ENV !== 'production' ? authError : undefined
+            }, { status: 401 });
         }
 
         // Create a secure, random session token stored in the DB
