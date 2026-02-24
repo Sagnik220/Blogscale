@@ -7,8 +7,9 @@ import { ViewTracker } from './ViewTracker';
 
 export const dynamic = 'force-dynamic';
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-    const blog = await getBlogBySlug(params.slug);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params;
+    const blog = await getBlogBySlug(slug);
     if (!blog) return { title: 'Post Not Found' };
     return {
         title: `${blog.title} | BlogScale`,
@@ -16,8 +17,9 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     };
 }
 
-export default async function BlogPost({ params }: { params: { slug: string } }) {
-    const blog = await getBlogBySlug(params.slug);
+export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params;
+    const blog = await getBlogBySlug(slug);
     if (!blog) notFound();
 
     const htmlContent = marked.parse(blog.content);

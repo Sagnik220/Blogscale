@@ -2,9 +2,10 @@ import { NextResponse } from 'next/server';
 import { incrementViewCount } from '@/lib/blogs';
 import crypto from 'crypto';
 
-export async function POST(request: Request, { params }: { params: { id: string } }) {
+export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
-        const blogId = Number(params.id);
+        const { id } = await params;
+        const blogId = Number(id);
         if (isNaN(blogId)) {
             return NextResponse.json({ error: 'Invalid blog ID' }, { status: 400 });
         }

@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server';
 import { updateBlog, deleteBlog } from '@/lib/blogs';
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
+        const { id } = await params;
         const data = await request.json();
-        await updateBlog(Number(params.id), data);
+        await updateBlog(Number(id), data);
         return NextResponse.json({ success: true });
     } catch (error) {
         console.error('Failed to update blog:', error);
@@ -12,9 +13,10 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     }
 }
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
-        await deleteBlog(Number(params.id));
+        const { id } = await params;
+        await deleteBlog(Number(id));
         return NextResponse.json({ success: true });
     } catch (error) {
         console.error('Failed to delete blog:', error);
