@@ -6,8 +6,12 @@ const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 // diagnostic for logging
 if (!supabaseUrl || !supabaseServiceKey) {
     console.error('--- VERCEL ENV DIAGNOSTIC ---');
-    console.error('NEXT_PUBLIC_SUPABASE_URL:', supabaseUrl ? 'OK' : 'MISSING');
-    console.error('SUPABASE_SERVICE_ROLE_KEY:', supabaseServiceKey ? 'OK' : 'MISSING');
+    console.error('NEXT_PUBLIC_SUPABASE_URL:', supabaseUrl ? `Set (Length: ${supabaseUrl.length}, Prefix: ${supabaseUrl.substring(0, 8)}...)` : 'MISSING');
+    console.error('SUPABASE_SERVICE_ROLE_KEY:', supabaseServiceKey ? `Set (Length: ${supabaseServiceKey.length})` : 'MISSING');
+} else if (process.env.NODE_ENV === 'production') {
+    console.log('--- SUPABASE CONFIG DIAGNOSTIC ---');
+    console.log('URL Prefix:', supabaseUrl.substring(0, 15));
+    console.log('Key Length:', supabaseServiceKey.length);
 }
 
 // Export a getter to ensure we get a fresh client or throw a better error
