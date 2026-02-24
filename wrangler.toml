@@ -8,11 +8,6 @@ directory = ".open-next/assets"
 binding = "ASSETS"
 
 [vars]
-# Add your environment variables here
-# NEXT_PUBLIC_SUPABASE_URL = ""
-# NEXT_PUBLIC_SUPABASE_ANON_KEY = ""
-
-# If you want to use KV for caching, uncomment this and provide a real ID
-# [[kv_namespaces]]
-# binding = "NEXT_CACHE"
-# id = "xxxx" 
+# NODE_VERSION = "22"
+# Add ONLY non-secret variables here if needed
+# Secrets should be managed in the Cloudflare Dashboard
