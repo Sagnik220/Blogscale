@@ -62,6 +62,7 @@ export async function verifyAdminCredentials(
         .single();
 
     if (error || !user) {
+        if (error) console.error('Supabase admin lookup error:', error);
         return { valid: false, userId: null };
     }
 
@@ -75,8 +76,8 @@ const loginAttempts = new Map<string, { count: number; resetAt: number }>();
 
 export function checkRateLimit(ip: string): { allowed: boolean; retryAfter?: number } {
     const now = Date.now();
-    const windowMs = 15 * 60 * 1000; // 15 minutes
-    const maxAttempts = 5;
+    const windowMs = 5 * 60 * 1000; // 5 minutes
+    const maxAttempts = 100; // Relaxed for debugging
 
     const entry = loginAttempts.get(ip);
 
