@@ -14,9 +14,9 @@
     "cookie": "^1.1.1",
     "dompurify": "^3.3.1",
     "marked": "^15.0.12",
-    "next": "15.1.7",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "next": "15.0.4",
+    "react": "19.0.0-rc-66855b96-20241106",
+    "react-dom": "19.0.0-rc-66855b96-20241106"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
@@ -24,10 +24,10 @@
     "@types/dompurify": "^3.0.5",
     "@types/marked": "^5.0.2",
     "@types/node": "^20",
-    "@types/react": "^19.0.8",
-    "@types/react-dom": "^19.0.3",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
     "eslint": "^9.0.0",
-    "eslint-config-next": "15.1.7",
+    "eslint-config-next": "15.0.4",
     "typescript": "^5"
   }
 }
