@@ -7,8 +7,20 @@ export async function middleware(request: NextRequest) {
 
     // To validate sessions against Supabase in middleware (Edge Runtime),
     // we call an internal API endpoint that checks the DB.
-    let isAuthenticated = false;
+    // 1. PUBLIC ROUTES - Always allow
+    const isPublicRoute =
+        pathname === '/' ||
+        pathname.startsWith('/blog/') ||
+        pathname.startsWith('/_next') ||
+        pathname.startsWith('/favicon') ||
+        (pathname.startsWith('/api/blogs') && pathname.endsWith('/views')); // Allow view tracking
 
+    if (isPublicRoute) {
+        return NextResponse.next();
+    }
+
+    // 2. SESSION VALIDATION
+    let isAuthenticated = false;
     if (sessionToken) {
         try {
             const validateUrl = new URL('/api/auth/validate', request.url);
@@ -24,18 +36,16 @@ export async function middleware(request: NextRequest) {
         }
     }
 
-    // Smart redirect: already-authenticated users bypass the login page
-    if (pathname === '/admin/login' && isAuthenticated) {
-        return NextResponse.redirect(new URL('/admin/dashboard', request.url));
+    // 3. ADMIN LOGIN REDIRECTS
+    if (pathname === '/admin/login') {
+        if (isAuthenticated) {
+            return NextResponse.redirect(new URL('/admin/dashboard', request.url));
+        }
+        return NextResponse.next();
     }
 
-    // Also redirect /admin root to dashboard if authenticated
-    if (pathname === '/admin' && isAuthenticated) {
-        return NextResponse.redirect(new URL('/admin/dashboard', request.url));
-    }
-
-    // Define protected routes
-    const isProtectedAdminRoute = pathname.startsWith('/admin') && !pathname.startsWith('/admin/login');
+    // 4. PROTECTED ROUTES
+    const isProtectedAdminRoute = pathname.startsWith('/admin');
     const isProtectedApiRoute = pathname.startsWith('/api/blogs') && request.method !== 'GET';
     const isUploadApiRoute = pathname.startsWith('/api/upload');
 
