@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { marked } from 'marked';
 import './article.css';
 import { ViewTracker } from './ViewTracker';
+import { ShareButton } from './ShareButton';
 
 export const dynamic = 'force-dynamic';
 
@@ -84,12 +85,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
 
                     <div style={{ width: '32px', height: '2px', background: '#000', margin: '0.5rem 0' }}></div>
 
-                    <button className="btn-social">
-                        <span className="material-symbols-outlined">bookmark</span>
-                    </button>
-                    <button className="btn-social" style={{ marginTop: '1rem' }}>
-                        <span className="material-symbols-outlined">share</span>
-                    </button>
+                    <ShareButton />
                 </aside>
 
                 {/* Article Center Column */}
