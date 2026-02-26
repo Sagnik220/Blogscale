@@ -7,7 +7,7 @@ import { ViewTracker } from './ViewTracker';
 import { ShareButton } from './ShareButton';
 
 import hljs from 'highlight.js';
-import 'highlight.js/styles/github.css';
+import 'highlight.js/styles/github-dark.css';
 
 export const dynamic = 'force-dynamic';
 
