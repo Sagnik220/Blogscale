@@ -4,8 +4,28 @@ import { useEffect, useState, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
+import hljs from 'highlight.js';
+import 'highlight.js/styles/github-dark.css'; // base fallback
 
 import './editor.css';
+
+const LANGUAGES = [
+    { label: 'Plain Text', value: 'plaintext' },
+    { label: 'JavaScript', value: 'javascript' },
+    { label: 'TypeScript', value: 'typescript' },
+    { label: 'Python', value: 'python' },
+    { label: 'Java', value: 'java' },
+    { label: 'C++', value: 'cpp' },
+    { label: 'C', value: 'c' },
+    { label: 'SQL', value: 'sql' },
+    { label: 'JSON', value: 'json' },
+    { label: 'HTML/XML', value: 'xml' },
+    { label: 'CSS', value: 'css' },
+    { label: 'Bash/Shell', value: 'bash' },
+    { label: 'Go', value: 'go' },
+    { label: 'GraphQL', value: 'graphql' },
+    { label: 'Rust', value: 'rust' }
+];
 
 function EditorForm() {
     const router = useRouter();
@@ -26,8 +46,25 @@ function EditorForm() {
     const [previewMode, setPreviewMode] = useState(false);
     const [saving, setSaving] = useState(false);
     const [wordCount, setWordCount] = useState(0);
+    const [showLangDropdown, setShowLangDropdown] = useState(false);
+
     const fileInputRef = useRef<HTMLInputElement>(null);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+    // Initial hljs setup for marked
+    useEffect(() => {
+        const renderer = new marked.Renderer();
+        marked.setOptions({
+            renderer,
+            highlight: function (code: string, lang: string) {
+                const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+                return hljs.highlight(code, { language }).value;
+            },
+            langPrefix: 'hljs language-',
+            breaks: true,
+            gfm: true
+        } as any);
+    }, []);
 
     useEffect(() => {
         if (editId) {
@@ -56,6 +93,25 @@ function EditorForm() {
         const words = content.trim().split(/\s+/).filter(Boolean).length;
         setWordCount(words);
     }, [content]);
+
+    const applyFormatting = (prefix: string, suffix: string) => {
+        const textarea = textareaRef.current;
+        if (!textarea) return;
+
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const selectedText = content.substring(start, end);
+
+        const newContent = content.substring(0, start) + prefix + selectedText + suffix + content.substring(end);
+        setContent(newContent);
+
+        // Reset cursor position
+        setTimeout(() => {
+            textarea.selectionStart = start + prefix.length;
+            textarea.selectionEnd = start + prefix.length + selectedText.length;
+            textarea.focus();
+        }, 0);
+    };
 
     const handleSave = async () => {
         if (!title || !slug || !content) return alert('Title, slug, and content are required.');
@@ -277,11 +333,11 @@ function EditorForm() {
                     </div>
 
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                        <button className="btn-toolbar active">
+                        <button className={`btn-toolbar ${!previewMode ? 'active' : ''}`} onClick={() => setPreviewMode(false)}>
                             <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>edit_square</span>
                             Write
                         </button>
-                        <button className="btn-toolbar" onClick={() => setPreviewMode(!previewMode)}>
+                        <button className={`btn-toolbar ${previewMode ? 'active' : ''}`} onClick={() => setPreviewMode(true)}>
                             <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>preview</span>
                             Preview
                         </button>
@@ -289,19 +345,39 @@ function EditorForm() {
                         <div style={{ width: '1px', height: '24px', background: '#1a1a1a' }}></div>
 
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                            <button className="btn-icon">
+                            <button className="btn-icon" onClick={() => applyFormatting('**', '**')} title="Bold">
                                 <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>format_bold</span>
                             </button>
-                            <button className="btn-icon">
+                            <button className="btn-icon" onClick={() => applyFormatting('*', '*')} title="Italic">
                                 <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>format_italic</span>
                             </button>
-                            <button className="btn-icon">
-                                <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>code</span>
-                            </button>
-                            <button className="btn-icon">
+
+                            <div className="lang-select-wrapper">
+                                <button className="btn-icon" onClick={() => setShowLangDropdown(!showLangDropdown)} title="Code Block">
+                                    <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>code</span>
+                                </button>
+                                {showLangDropdown && (
+                                    <div className="lang-dropdown custom-scrollbar">
+                                        {LANGUAGES.map(lang => (
+                                            <button
+                                                key={lang.value}
+                                                className="lang-option"
+                                                onClick={() => {
+                                                    applyFormatting(`\n\`\`\`${lang.value}\n`, '\n\`\`\`\n');
+                                                    setShowLangDropdown(false);
+                                                }}
+                                            >
+                                                {lang.label}
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+
+                            <button className="btn-icon" onClick={() => applyFormatting('[', '](url)')} title="Link">
                                 <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>link</span>
                             </button>
-                            <button className="btn-icon" onClick={() => fileInputRef.current?.click()}>
+                            <button className="btn-icon" onClick={() => fileInputRef.current?.click()} title="Image">
                                 <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>image</span>
                             </button>
                             <input type="file" accept="image/*,video/*" ref={fileInputRef} onChange={handleFileUpload} style={{ display: 'none' }} />

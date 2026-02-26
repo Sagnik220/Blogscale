@@ -6,7 +6,23 @@ import './article.css';
 import { ViewTracker } from './ViewTracker';
 import { ShareButton } from './ShareButton';
 
+import hljs from 'highlight.js';
+import 'highlight.js/styles/github-dark.css';
+
 export const dynamic = 'force-dynamic';
+
+// Configure marked with syntax highlighting
+const renderer = new marked.Renderer();
+marked.setOptions({
+    renderer,
+    highlight: function (code: string, lang: string) {
+        const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+        return hljs.highlight(code, { language }).value;
+    },
+    langPrefix: 'hljs language-',
+    breaks: true,
+    gfm: true
+} as any);
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
