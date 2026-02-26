@@ -116,17 +116,17 @@
 }
 
 .article-content pre {
-    background-color: #0D0D0D !important;
-    padding: 1.5rem;
-    border: 2px solid #000;
-    box-shadow: 4px 4px 0 #FFD700;
-    overflow-x: auto;
+    border: 3px solid #000 !important;
+    box-shadow: 12px 12px 0 #FFD700 !important;
+    background: #000 !important;
+    padding: 1.5rem !important;
     margin-bottom: 2rem;
+    overflow-x: auto;
 }
 
 .article-content code {
     font-family: var(--font-mono, monospace);
-    font-size: 0.875rem;
+    font-size: 0.95rem;
     color: #fff;
 }
 
@@ -292,4 +292,43 @@
 
 .mobile-action-bar {
     display: none;
+}
+
+/* Syntax Highlighting */
+.hljs {
+    background: transparent !important;
+    padding: 0 !important;
+    font-family: inherit;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-title,
+.hljs-section,
+.hljs-doctag,
+.hljs-name,
+.hljs-strong {
+    color: #ffde34;
+    font-weight: bold;
+}
+
+.hljs-string,
+.hljs-title,
+.hljs-section,
+.hljs-built_in,
+.hljs-literal,
+.hljs-type,
+.hljs-addition,
+.hljs-tag,
+.hljs-quote,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class {
+    color: #6ee7b7;
+}
+
+.hljs-comment,
+.hljs-deletion,
+.hljs-meta {
+    color: #525252;
 }
