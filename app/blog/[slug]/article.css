@@ -261,12 +261,3 @@
     }
 }
 
-@media (max-width: 768px) {
-    .main-padding {
-        padding: 3rem 1.5rem !important;
-    }
-
-    .header-padding {
-        padding: 0 1.5rem !important;
-    }
-}
