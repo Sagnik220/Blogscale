@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
 import hljs from 'highlight.js';
-import 'highlight.js/styles/github-dark.css'; // base fallback
+import 'highlight.js/styles/github.css'; // switch to light theme
 
 import './editor.css';
 

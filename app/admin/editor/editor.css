@@ -163,7 +163,7 @@
     background: #404040;
 }
 
-/* Markdown Preview overrides for Dark Mode */
+/* Markdown Preview overrides for Dark Mode (Container only) */
 .blog-content.dark-mode {
     color: #d4d4d8;
 }
@@ -180,19 +180,87 @@
     color: #a3a3a3;
 }
 
-.blog-content.dark-mode pre {
-    background: #111;
-    border: 1px solid #1a1a1a;
+/* Light Theme Code Blocks (Medium Style) */
+.blog-content pre,
+.article-content pre {
+    background-color: #f7f7f7 !important;
+    padding: 1.5rem !important;
+    border: 2px solid #000 !important;
+    box-shadow: 6px 6px 0px #FFD700 !important;
+    overflow-x: auto;
+    margin-bottom: 2rem;
+    border-radius: 4px;
 }
 
-.blog-content.dark-mode code {
-    color: #e5e5e5;
+.blog-content code,
+.article-content code {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 0.95rem;
+    color: #24292e;
+    /* dark text for light bg */
 }
 
-.blog-content.dark-mode p code {
-    background: #1a1a1a;
-    border: 1px solid #262626;
+/* Syntax Highlighting (Light Theme) */
+.hljs {
+    background: transparent !important;
+    padding: 0 !important;
+    color: #24292e !important;
 }
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal,
+.hljs-section {
+    color: #d73a49 !important;
+    /* Red/Pink */
+    font-weight: 600;
+}
+
+.hljs-attribute,
+.hljs-name,
+.hljs-tag {
+    color: #22863a !important;
+    /* Green */
+}
+
+.hljs-string,
+.hljs-meta-string {
+    color: #032f62 !important;
+    /* Dark Blue */
+}
+
+.hljs-attr,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-type,
+.hljs-selector-class,
+.hljs-selector-id,
+.hljs-number {
+    color: #e36209 !important;
+    /* Orange */
+}
+
+.hljs-comment,
+.hljs-quote,
+.hljs-deletion {
+    color: #6a737d !important;
+    /* Gray */
+    font-style: italic;
+}
+
+.hljs-function,
+.hljs-title,
+.hljs-title.function_ {
+    color: #6f42c1 !important;
+    /* Purple */
+}
+
+.hljs-built_in,
+.hljs-class,
+.hljs-keyword {
+    color: #d73a49 !important;
+}
+
 /* Formatting Icons */
 .btn-icon.active {
     color: #ffd700 !important;
@@ -213,7 +281,7 @@
     z-index: 1000;
     background: #111;
     border: 1px solid #333;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
     width: 160px;
     max-height: 200px;
     overflow-y: auto;
@@ -237,29 +305,4 @@
 .lang-option:hover {
     background: #222;
     color: #ffd700;
-}
-
-/* Code Highlighting Tweaks for Preview */
-.blog-content pre {
-    border: 1px solid #1a1a1a !important;
-    box-shadow: 8px 8px 0 #111 !important;
-}
-
-.hljs {
-    background: transparent !important;
-    padding: 0 !important;
-}
-
-/* Custom HLJS override for Neobrutalist look */
-.hljs-keyword, .hljs-selector-tag, .hljs-title, .hljs-section, .hljs-doctag, .hljs-name, .hljs-strong {
-    color: #ffde34;
-    font-weight: bold;
-}
-
-.hljs-string, .hljs-title, .hljs-section, .hljs-built_in, .hljs-literal, .hljs-type, .hljs-addition, .hljs-tag, .hljs-quote, .hljs-name, .hljs-selector-id, .hljs-selector-class {
-    color: #6ee7b7;
-}
-
-.hljs-comment, .hljs-deletion, .hljs-meta {
-    color: #525252;
 }

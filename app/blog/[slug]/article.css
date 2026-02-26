@@ -115,19 +115,22 @@
     color: #333;
 }
 
+/* Light Theme Code Blocks (Medium Style) */
 .article-content pre {
-    border: 3px solid #000 !important;
-    box-shadow: 12px 12px 0 #FFD700 !important;
-    background: #000 !important;
+    background-color: #f7f7f7 !important;
     padding: 1.5rem !important;
-    margin-bottom: 2rem;
+    border: 2px solid #000 !important;
+    box-shadow: 6px 6px 0px #FFD700 !important;
     overflow-x: auto;
+    margin-bottom: 2rem;
+    border-radius: 4px;
 }
 
 .article-content code {
-    font-family: var(--font-mono, monospace);
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
     font-size: 0.95rem;
-    color: #fff;
+    color: #24292e;
+    /* dark text for light bg */
 }
 
 .article-content p code {
@@ -136,6 +139,66 @@
     padding: 0.2rem 0.4rem;
     border: 1px solid #E5E5E5;
     font-size: 0.9em;
+}
+
+/* Syntax Highlighting (Light Theme Overrides) */
+.hljs {
+    background: transparent !important;
+    padding: 0 !important;
+    color: #24292e !important;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal,
+.hljs-section {
+    color: #d73a49 !important;
+    /* Red/Pink */
+    font-weight: 600;
+}
+
+.hljs-attribute,
+.hljs-name,
+.hljs-tag {
+    color: #22863a !important;
+    /* Green */
+}
+
+.hljs-string,
+.hljs-meta-string {
+    color: #032f62 !important;
+    /* Dark Blue */
+}
+
+.hljs-attr,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-type,
+.hljs-selector-class,
+.hljs-selector-id,
+.hljs-number {
+    color: #e36209 !important;
+    /* Orange */
+}
+
+.hljs-comment,
+.hljs-quote,
+.hljs-deletion {
+    color: #6a737d !important;
+    /* Gray */
+    font-style: italic;
+}
+
+.hljs-function,
+.hljs-title,
+.hljs-title.function_ {
+    color: #6f42c1 !important;
+    /* Purple */
+}
+
+.hljs-built_in,
+.hljs-class {
+    color: #d73a49 !important;
 }
 
 /* UI Elements from Stitch Design */
@@ -292,43 +355,4 @@
 
 .mobile-action-bar {
     display: none;
-}
-
-/* Syntax Highlighting */
-.hljs {
-    background: transparent !important;
-    padding: 0 !important;
-    font-family: inherit;
-}
-
-.hljs-keyword,
-.hljs-selector-tag,
-.hljs-title,
-.hljs-section,
-.hljs-doctag,
-.hljs-name,
-.hljs-strong {
-    color: #ffde34;
-    font-weight: bold;
-}
-
-.hljs-string,
-.hljs-title,
-.hljs-section,
-.hljs-built_in,
-.hljs-literal,
-.hljs-type,
-.hljs-addition,
-.hljs-tag,
-.hljs-quote,
-.hljs-name,
-.hljs-selector-id,
-.hljs-selector-class {
-    color: #6ee7b7;
-}
-
-.hljs-comment,
-.hljs-deletion,
-.hljs-meta {
-    color: #525252;
 }
