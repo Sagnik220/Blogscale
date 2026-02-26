@@ -95,7 +95,8 @@ function EditorForm() {
             const res = await fetch('/api/upload', { method: 'POST', body: formData });
             const data = await res.json();
             if (data.url) {
-                const markdownImage = `\n![${file.name}](${data.url})\n`;
+                // Defaulting to 100% width, user can change the #w= parameter
+                const markdownImage = `\n![${file.name}](${data.url}#w=100)\n`;
                 const textarea = textareaRef.current;
                 if (textarea) {
                     const start = textarea.selectionStart;
@@ -104,6 +105,7 @@ function EditorForm() {
                     setContent(newContent);
                     setTimeout(() => { textarea.selectionStart = textarea.selectionEnd = start + markdownImage.length; textarea.focus(); }, 0);
                 } else { setContent(prev => prev + markdownImage); }
+                console.log('Tip: Change #w=100 to #w=50 to resize image to 50%');
             } else { alert(data.error || 'Failed to upload image'); }
         } catch { alert('Error uploading image'); }
         if (fileInputRef.current) fileInputRef.current.value = '';

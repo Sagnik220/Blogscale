@@ -75,15 +75,15 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
             <main style={{ position: 'relative', flex: 1, width: '100%', maxWidth: '1400px', margin: '0 auto', padding: '4rem 1rem', display: 'flex', justifyContent: 'space-between', gap: '4rem' }} className="main-padding">
 
                 {/* Left Sidebar (Sticky Social Actions) */}
-                <aside style={{ display: 'none', flexDirection: 'column', gap: '2rem', position: 'sticky', top: '8rem', height: 'max-content', width: '5rem', alignItems: 'center', borderRight: '2px solid rgba(0,0,0,0.05)', paddingRight: '2rem' } as any} className="xl-flex">
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', width: '100%', cursor: 'pointer' }} className="group">
+                <aside style={{ display: 'none', flexDirection: 'column', gap: '1.25rem', position: 'sticky', top: '8rem', height: 'max-content', width: '5rem', alignItems: 'center', borderRight: '2px solid rgba(0,0,0,0.05)', paddingRight: '2rem' } as any} className="xl-flex">
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.4rem', width: '100%', cursor: 'pointer' }} className="group">
                         <button className="btn-social">
                             <span className="material-symbols-outlined">visibility</span>
                         </button>
                         <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#000' }}>{blog.view_count || 0}</span>
                     </div>
 
-                    <div style={{ width: '32px', height: '2px', background: '#000', margin: '0.5rem 0' }}></div>
+                    <div style={{ width: '24px', height: '2px', background: '#000', margin: '0.25rem 0' }}></div>
 
                     <ShareButton />
                 </aside>
@@ -133,9 +133,9 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
                     {/* Article Content */}
                     <div className="article-content" style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
                         {blog.image_url && (
-                            <div style={{ position: 'relative', width: '100%', marginBottom: '2rem' }}>
-                                <div style={{ border: '4px solid #000', boxShadow: '8px 8px 0px rgba(0,0,0,1)', background: '#F9F9F9', overflow: 'hidden' }}>
-                                    <img src={blog.image_url} alt="Cover image" style={{ width: '100%', height: 'auto', display: 'block', aspectRatio: '21/9', objectFit: 'cover', filter: 'grayscale(0.5)' }} />
+                            <div style={{ position: 'relative', width: '100%', marginBottom: '3rem' }}>
+                                <div style={{ border: '3px solid #000', boxShadow: '12px 12px 0px #FFD700', background: '#F9F9F9', overflow: 'hidden' }}>
+                                    <img src={blog.image_url} alt="Cover image" style={{ width: '100%', height: 'auto', maxHeight: '500px', display: 'block', objectFit: 'cover' }} />
                                 </div>
                             </div>
                         )}
@@ -175,6 +175,15 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
                 {/* Right Placeholder to balance center column */}
                 <div style={{ display: 'none', width: '5rem' } as any} className="xl-block"></div>
             </main>
+
+            {/* Mobile Action Bar */}
+            <div className="mobile-action-bar">
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>visibility</span>
+                    <span style={{ fontWeight: 800, fontSize: '0.9rem' }}>{blog.view_count || 0} views</span>
+                </div>
+                <ShareButton />
+            </div>
 
             {/* ===== NEXT ARTICLE PREVIEWS ===== */}
             <section style={{ borderTop: '4px solid #000', background: '#111', padding: '5rem 0' }}>
