@@ -54,13 +54,29 @@ function EditorForm() {
     // Initial hljs setup for marked
     useEffect(() => {
         const renderer = new marked.Renderer();
+
+        renderer.code = function ({ text, lang, escaped }: { text: string, lang?: string, escaped?: boolean }): string {
+            const language = (lang || 'plaintext').toLowerCase();
+            const highlighted = hljs.highlight(text, { language: hljs.getLanguage(language) ? language : 'plaintext' }).value;
+
+            // Display name for the header
+            const displayLang = language === 'plaintext' ? '' : language.toUpperCase();
+
+            return `
+                <div class="code-block" data-lang="${language}">
+                    <div class="code-header">
+                        <span class="code-lang">${displayLang}</span>
+                        <span class="material-symbols-outlined" style="font-size: 16px; opacity: 0.5;">expand_more</span>
+                    </div>
+                    <div class="code-content">
+                        <pre><code class="hljs language-${language}">${highlighted}</code></pre>
+                    </div>
+                </div>
+            `;
+        };
+
         marked.setOptions({
             renderer,
-            highlight: function (code: string, lang: string) {
-                const language = hljs.getLanguage(lang) ? lang : 'plaintext';
-                return hljs.highlight(code, { language }).value;
-            },
-            langPrefix: 'hljs language-',
             breaks: true,
             gfm: true
         } as any);
