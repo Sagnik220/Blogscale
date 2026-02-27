@@ -305,23 +305,35 @@ function EditorForm() {
     };
 
     const handlePaste = async (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
-        const items = e.clipboardData.items;
-        const files = e.clipboardData.files;
-        let foundImage = false;
+        const clipboardData = e.clipboardData;
+        if (!clipboardData) return;
 
+        const items = Array.from(clipboardData.items);
+        const types = clipboardData.types;
+
+        // Debugging logs and alerts
+        console.log('Paste event triggered. Types:', types);
+
+        let foundImage = false;
         const imageFiles: File[] = [];
-        for (let i = 0; i < items.length; i++) {
-            if (items[i].type.indexOf('image') !== -1) {
-                const file = items[i].getAsFile();
-                if (file) imageFiles.push(file);
-                foundImage = true;
+
+        // Check Items
+        for (const item of items) {
+            if (item.type.indexOf('image') !== -1) {
+                const file = item.getAsFile();
+                if (file) {
+                    imageFiles.push(file);
+                    foundImage = true;
+                }
             }
         }
 
-        if (!foundImage && files && files.length > 0) {
-            for (let i = 0; i < files.length; i++) {
-                if (files[i].type.indexOf('image') !== -1) {
-                    imageFiles.push(files[i]);
+        // Fallback to Files
+        if (!foundImage && clipboardData.files.length > 0) {
+            const files = Array.from(clipboardData.files);
+            for (const file of files) {
+                if (file.type.indexOf('image') !== -1) {
+                    imageFiles.push(file);
                     foundImage = true;
                 }
             }
@@ -330,15 +342,12 @@ function EditorForm() {
         if (foundImage) {
             e.preventDefault();
             setIsUploadingImage(true);
-
             try {
                 for (const file of imageFiles) {
                     const formData = new FormData();
                     formData.append('file', file);
-
                     const res = await fetch('/api/upload', { method: 'POST', body: formData });
                     const data = await res.json();
-
                     if (data.url) {
                         const markdownImage = `\n![Pasted Image](${data.url}#w=100)\n`;
                         const textarea = textareaRef.current;
@@ -352,15 +361,18 @@ function EditorForm() {
                                 textarea.focus();
                             }, 0);
                         }
-                    } else {
-                        throw new Error(data.error || 'Upload failed');
                     }
                 }
             } catch (err) {
                 console.error('Paste upload failed:', err);
-                alert('Failed to upload pasted image. Please try again.');
+                alert('Upload failed. Please try again.');
             } finally {
                 setIsUploadingImage(false);
+            }
+        } else {
+            // Log for debugging if it was a paste but no image was found
+            if (types.includes('Files') || items.some(i => i.kind === 'file')) {
+                console.log('Paste detected file/kind but no image type matched.');
             }
         }
     };
