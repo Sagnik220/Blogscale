@@ -279,6 +279,16 @@ function EditorForm() {
         setSlug(title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, ''));
     };
 
+    // Global paste listener for debugging
+    useEffect(() => {
+        const handleGlobalPaste = (e: ClipboardEvent) => {
+            console.log('Global window paste event!', e.clipboardData?.types);
+            alert('GLOBAL Paste detected! Types: ' + e.clipboardData?.types.join(', '));
+        };
+        window.addEventListener('paste', handleGlobalPaste);
+        return () => window.removeEventListener('paste', handleGlobalPaste);
+    }, []);
+
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
@@ -305,6 +315,7 @@ function EditorForm() {
     };
 
     const handlePaste = async (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+        alert('Textarea onPaste triggered!');
         const clipboardData = e.clipboardData;
         if (!clipboardData) return;
 
@@ -633,7 +644,7 @@ function EditorForm() {
 
                 {/* Editor Content Area */}
                 <div className="custom-scrollbar" style={{ flex: 1, overflowY: 'auto', padding: '3rem', display: 'flex', justifyContent: 'center' }}>
-                    <div style={{ width: '100%', maxWidth: '800px', display: 'flex', flexDirection: 'column' }}>
+                    <div style={{ width: '100%', maxWidth: '800px', display: 'flex', flexDirection: 'column', flex: 1 }}>
 
                         {previewMode ? (
                             <>
