@@ -313,6 +313,7 @@ function EditorForm() {
 
         // Debugging logs and alerts
         console.log('Paste event triggered. Types:', types);
+        // alert('Paste event triggered! Types: ' + types.join(', '));
 
         let foundImage = false;
         const imageFiles: File[] = [];
