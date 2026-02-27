@@ -667,6 +667,7 @@ function EditorForm() {
                                 <textarea
                                     ref={textareaRef}
                                     className="editor-body custom-scrollbar"
+                                    style={{ minHeight: '600px' }}
                                     placeholder="Start writing the technical deep dive..."
                                     value={content}
                                     onChange={e => updateContent(e.target.value)}
