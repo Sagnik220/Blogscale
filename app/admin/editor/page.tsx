@@ -384,11 +384,67 @@ function EditorForm() {
         } else if (types.includes('text/html')) {
             const html = clipboardData.getData('text/html');
             console.log('HTML Paste detected:', html.substring(0, 100) + '...');
+
+            // Try to find image tags in HTML
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const images = Array.from(doc.querySelectorAll('img'));
+
+            if (images.length > 0) {
+                e.preventDefault();
+                setIsUploadingImage(true);
+
+                try {
+                    for (const img of images) {
+                        const src = img.src;
+                        if (!src) continue;
+
+                        // If it's a data URL, convert to file and upload
+                        if (src.startsWith('data:')) {
+                            const res = await fetch(src);
+                            const blob = await res.blob();
+                            const file = new File([blob], 'pasted-image.png', { type: blob.type });
+
+                            const formData = new FormData();
+                            formData.append('file', file);
+                            const uploadRes = await fetch('/api/upload', { method: 'POST', body: formData });
+                            const data = await uploadRes.json();
+
+                            if (data.url) {
+                                insertMarkdownImage(data.url);
+                            }
+                        } else if (src.startsWith('http')) {
+                            // If it's a direct URL, we can just use it or upload it if we want to host it locally
+                            // For now, let's just insert it to see if it works
+                            insertMarkdownImage(src);
+                        }
+                    }
+                } catch (err) {
+                    console.error('HTML Image extraction failed:', err);
+                } finally {
+                    setIsUploadingImage(false);
+                }
+            }
         } else {
             // Log for debugging if it was a paste but no image was found
             if (types.includes('Files') || items.some(i => i.kind === 'file')) {
                 console.log('Paste detected file/kind but no image type matched.');
             }
+        }
+    };
+
+    const insertMarkdownImage = (url: string) => {
+        const markdownImage = `\n![Image](${url}#w=100)\n`;
+        const textarea = textareaRef.current;
+        if (textarea) {
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const newContent = content.substring(0, start) + markdownImage + content.substring(end);
+            updateContent(newContent);
+            setTimeout(() => {
+                textarea.selectionStart = textarea.selectionEnd = start + markdownImage.length;
+                textarea.focus();
+            }, 0);
         }
     };
 
