@@ -50,6 +50,7 @@ function EditorForm() {
     const [wordCount, setWordCount] = useState(0);
     const [showLangDropdown, setShowLangDropdown] = useState(false);
     const [showHeadingDropdown, setShowHeadingDropdown] = useState(false);
+    const [isUploadingImage, setIsUploadingImage] = useState(false);
 
     const fileInputRef = useRef<HTMLInputElement>(null);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -305,22 +306,39 @@ function EditorForm() {
 
     const handlePaste = async (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
         const items = e.clipboardData.items;
-        let imageFound = false;
+        const files = e.clipboardData.files;
+        let foundImage = false;
 
+        const imageFiles: File[] = [];
         for (let i = 0; i < items.length; i++) {
             if (items[i].type.indexOf('image') !== -1) {
                 const file = items[i].getAsFile();
-                if (!file) continue;
+                if (file) imageFiles.push(file);
+                foundImage = true;
+            }
+        }
 
-                imageFound = true;
-                e.preventDefault();
+        if (!foundImage && files && files.length > 0) {
+            for (let i = 0; i < files.length; i++) {
+                if (files[i].type.indexOf('image') !== -1) {
+                    imageFiles.push(files[i]);
+                    foundImage = true;
+                }
+            }
+        }
 
-                const formData = new FormData();
-                formData.append('file', file);
+        if (foundImage) {
+            e.preventDefault();
+            setIsUploadingImage(true);
 
-                try {
+            try {
+                for (const file of imageFiles) {
+                    const formData = new FormData();
+                    formData.append('file', file);
+
                     const res = await fetch('/api/upload', { method: 'POST', body: formData });
                     const data = await res.json();
+
                     if (data.url) {
                         const markdownImage = `\n![Pasted Image](${data.url}#w=100)\n`;
                         const textarea = textareaRef.current;
@@ -334,10 +352,15 @@ function EditorForm() {
                                 textarea.focus();
                             }, 0);
                         }
+                    } else {
+                        throw new Error(data.error || 'Upload failed');
                     }
-                } catch (err) {
-                    console.error('Paste upload failed:', err);
                 }
+            } catch (err) {
+                console.error('Paste upload failed:', err);
+                alert('Failed to upload pasted image. Please try again.');
+            } finally {
+                setIsUploadingImage(false);
             }
         }
     };
@@ -505,6 +528,12 @@ function EditorForm() {
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                         <span style={{ padding: '0.25rem 0.5rem', background: '#222', borderRadius: '0.25rem', fontSize: '0.75rem', fontWeight: 700, color: '#ffd700', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Draft</span>
                         <span style={{ fontSize: '0.875rem', color: '#666' }}>Saved just now</span>
+                        {isUploadingImage && (
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginLeft: '1rem', color: '#ffd700', fontSize: '0.75rem', fontWeight: 600 }}>
+                                <span className="material-symbols-outlined rotating" style={{ fontSize: '16px' }}>sync</span>
+                                UPLOADING IMAGE...
+                            </div>
+                        )}
                     </div>
 
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
