@@ -309,18 +309,25 @@ function EditorForm() {
         if (!clipboardData) return;
 
         const items = Array.from(clipboardData.items);
+        const types = clipboardData.types;
+
+        console.log('Paste detected types:', types);
+
+        let foundImage = false;
         const imageFiles: File[] = [];
 
+        // 1. Check for direct files in the clipboard
         for (const item of items) {
             if (item.type.indexOf('image') !== -1) {
                 const file = item.getAsFile();
                 if (file) {
                     imageFiles.push(file);
+                    foundImage = true;
                 }
             }
         }
 
-        if (imageFiles.length > 0) {
+        if (foundImage) {
             e.preventDefault();
             setIsUploadingImage(true);
             try {
@@ -337,6 +344,45 @@ function EditorForm() {
                 console.error('Snapshot attachment failed:', err);
             } finally {
                 setIsUploadingImage(false);
+            }
+        } else if (types.includes('text/html')) {
+            // 2. Fallback for Google Docs/HTML sources (specifically for blob: URLs)
+            const html = clipboardData.getData('text/html');
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const images = Array.from(doc.querySelectorAll('img'));
+
+            if (images.length > 0) {
+                e.preventDefault();
+                setIsUploadingImage(true);
+
+                try {
+                    for (const img of images) {
+                        const src = img.src;
+                        if (!src) continue;
+
+                        // Handle data URLs or blobs (common for Google Docs)
+                        if (src.startsWith('data:') || src.startsWith('blob:')) {
+                            const res = await fetch(src);
+                            const blob = await res.blob();
+                            const fileName = `pasted-image-${Date.now()}.${blob.type.split('/')[1] || 'png'}`;
+                            const file = new File([blob], fileName, { type: blob.type });
+
+                            const formData = new FormData();
+                            formData.append('file', file);
+                            const uploadRes = await fetch('/api/upload', { method: 'POST', body: formData });
+                            const data = await uploadRes.json();
+
+                            if (data.url) insertMarkdownImage(data.url);
+                        } else if (src.startsWith('http')) {
+                            insertMarkdownImage(src);
+                        }
+                    }
+                } catch (err) {
+                    console.error('HTML Image extraction failed:', err);
+                } finally {
+                    setIsUploadingImage(false);
+                }
             }
         }
     };
