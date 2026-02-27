@@ -279,16 +279,6 @@ function EditorForm() {
         setSlug(title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, ''));
     };
 
-    // Global paste listener for debugging
-    useEffect(() => {
-        const handleGlobalPaste = (e: ClipboardEvent) => {
-            console.log('Global window paste event!', e.clipboardData?.types);
-            alert('GLOBAL Paste detected! Types: ' + e.clipboardData?.types.join(', '));
-        };
-        window.addEventListener('paste', handleGlobalPaste);
-        return () => window.removeEventListener('paste', handleGlobalPaste);
-    }, []);
-
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
@@ -315,21 +305,18 @@ function EditorForm() {
     };
 
     const handlePaste = async (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
-        alert('Textarea onPaste triggered!');
         const clipboardData = e.clipboardData;
         if (!clipboardData) return;
 
         const items = Array.from(clipboardData.items);
         const types = clipboardData.types;
 
-        // Debugging logs and alerts
-        console.log('Paste event triggered. Types:', types);
-        alert('Paste event triggered! Types: ' + types.join(', '));
+        console.log('Paste detected types:', types);
 
         let foundImage = false;
         const imageFiles: File[] = [];
 
-        // Check Items
+        // 1. Check for direct files in the clipboard
         for (const item of items) {
             if (item.type.indexOf('image') !== -1) {
                 const file = item.getAsFile();
@@ -340,7 +327,7 @@ function EditorForm() {
             }
         }
 
-        // Fallback to Files
+        // 2. Secondary check for files property
         if (!foundImage && clipboardData.files.length > 0) {
             const files = Array.from(clipboardData.files);
             for (const file of files) {
@@ -361,31 +348,17 @@ function EditorForm() {
                     const res = await fetch('/api/upload', { method: 'POST', body: formData });
                     const data = await res.json();
                     if (data.url) {
-                        const markdownImage = `\n![Pasted Image](${data.url}#w=100)\n`;
-                        const textarea = textareaRef.current;
-                        if (textarea) {
-                            const start = textarea.selectionStart;
-                            const end = textarea.selectionEnd;
-                            const newContent = content.substring(0, start) + markdownImage + content.substring(end);
-                            updateContent(newContent);
-                            setTimeout(() => {
-                                textarea.selectionStart = textarea.selectionEnd = start + markdownImage.length;
-                                textarea.focus();
-                            }, 0);
-                        }
+                        insertMarkdownImage(data.url);
                     }
                 }
             } catch (err) {
                 console.error('Paste upload failed:', err);
-                alert('Upload failed. Please try again.');
             } finally {
                 setIsUploadingImage(false);
             }
         } else if (types.includes('text/html')) {
+            // 3. Fallback for Google Docs/HTML sources
             const html = clipboardData.getData('text/html');
-            console.log('HTML Paste detected:', html.substring(0, 100) + '...');
-
-            // Try to find image tags in HTML
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
             const images = Array.from(doc.querySelectorAll('img'));
@@ -399,23 +372,21 @@ function EditorForm() {
                         const src = img.src;
                         if (!src) continue;
 
-                        // If it's a data URL, convert to file and upload
-                        if (src.startsWith('data:')) {
+                        // Handle data URLs or blobs (common for Google Docs/local copy)
+                        if (src.startsWith('data:') || src.startsWith('blob:')) {
                             const res = await fetch(src);
                             const blob = await res.blob();
-                            const file = new File([blob], 'pasted-image.png', { type: blob.type });
+                            const fileName = `pasted-image-${Date.now()}.${blob.type.split('/')[1] || 'png'}`;
+                            const file = new File([blob], fileName, { type: blob.type });
 
                             const formData = new FormData();
                             formData.append('file', file);
                             const uploadRes = await fetch('/api/upload', { method: 'POST', body: formData });
                             const data = await uploadRes.json();
 
-                            if (data.url) {
-                                insertMarkdownImage(data.url);
-                            }
+                            if (data.url) insertMarkdownImage(data.url);
                         } else if (src.startsWith('http')) {
-                            // If it's a direct URL, we can just use it or upload it if we want to host it locally
-                            // For now, let's just insert it to see if it works
+                            // Direct web URL
                             insertMarkdownImage(src);
                         }
                     }
@@ -424,11 +395,6 @@ function EditorForm() {
                 } finally {
                     setIsUploadingImage(false);
                 }
-            }
-        } else {
-            // Log for debugging if it was a paste but no image was found
-            if (types.includes('Files') || items.some(i => i.kind === 'file')) {
-                console.log('Paste detected file/kind but no image type matched.');
             }
         }
     };
