@@ -37,6 +37,8 @@ function EditorForm() {
     const [snippet, setSnippet] = useState('');
     const [imageUrl, setImageUrl] = useState('');
     const [content, setContent] = useState('');
+    const [history, setHistory] = useState<string[]>([]);
+    const [historyIndex, setHistoryIndex] = useState(-1);
     const [authorName, setAuthorName] = useState('');
     const [authorTitle, setAuthorTitle] = useState('');
     const [authorBio, setAuthorBio] = useState('');
@@ -100,7 +102,7 @@ function EditorForm() {
                         setSlug(blog.slug);
                         setSnippet(blog.snippet || '');
                         setImageUrl(blog.image_url || '');
-                        setContent(blog.content);
+                        updateContent(blog.content);
                         setAuthorName(blog.author_name || '');
                         setAuthorTitle(blog.author_title || '');
                         setAuthorBio(blog.author_bio || '');
@@ -161,7 +163,7 @@ function EditorForm() {
         const selectedText = content.substring(start, end);
 
         const newContent = content.substring(0, start) + prefix + selectedText + suffix + content.substring(end);
-        setContent(newContent);
+        updateContent(newContent);
 
         // Reset cursor position
         setTimeout(() => {
@@ -177,13 +179,74 @@ function EditorForm() {
     };
 
     const insertList = (type: 'bullet' | 'number') => {
-        const prefix = type === 'bullet' ? '- ' : '1. ';
-        applyFormatting(prefix, '');
+        const textarea = textareaRef.current;
+        if (!textarea) return;
+
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const selectedText = content.substring(start, end);
+
+        const lines = selectedText.split('\n');
+        const formattedLines = lines.map((line, index) => {
+            const prefix = type === 'bullet' ? '- ' : `${index + 1}. `;
+            return prefix + line;
+        });
+
+        const replacement = formattedLines.join('\n');
+        const newContent = content.substring(0, start) + replacement + content.substring(end);
+        updateContent(newContent);
+
+        setTimeout(() => {
+            textarea.selectionStart = start;
+            textarea.selectionEnd = start + replacement.length;
+            textarea.focus();
+        }, 0);
     };
 
     const insertTable = () => {
         const tableTemplate = `\n| Header 1 | Header 2 |\n| :--- | :--- |\n| Data 1 | Data 2 |\n| Data 3 | Data 4 |\n`;
         applyFormatting(tableTemplate, '');
+    };
+
+    const updateContent = (newContent: string) => {
+        const newHistory = history.slice(0, historyIndex + 1);
+        newHistory.push(newContent);
+        if (newHistory.length > 50) newHistory.shift();
+
+        setHistory(newHistory);
+        setHistoryIndex(newHistory.length - 1);
+        setContent(newContent);
+    };
+
+    const undo = () => {
+        if (historyIndex > 0) {
+            const prevIndex = historyIndex - 1;
+            setHistoryIndex(prevIndex);
+            setContent(history[prevIndex]);
+        }
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if ((e.ctrlKey || e.metaKey) && !e.shiftKey) {
+            switch (e.key.toLowerCase()) {
+                case 'z':
+                    e.preventDefault();
+                    undo();
+                    break;
+                case 'b':
+                    e.preventDefault();
+                    applyFormatting('**', '**');
+                    break;
+                case 'i':
+                    e.preventDefault();
+                    applyFormatting('*', '*');
+                    break;
+                case 's':
+                    e.preventDefault();
+                    handleSave();
+                    break;
+            }
+        }
     };
 
     const handleSave = async () => {
@@ -231,9 +294,9 @@ function EditorForm() {
                     const start = textarea.selectionStart;
                     const end = textarea.selectionEnd;
                     const newContent = content.substring(0, start) + markdownImage + content.substring(end);
-                    setContent(newContent);
+                    updateContent(newContent);
                     setTimeout(() => { textarea.selectionStart = textarea.selectionEnd = start + markdownImage.length; textarea.focus(); }, 0);
-                } else { setContent(prev => prev + markdownImage); }
+                } else { updateContent(content + markdownImage); }
                 console.log('Tip: Change #w=100 to #w=50 to resize image to 50%');
             } else { alert(data.error || 'Failed to upload image'); }
         } catch { alert('Error uploading image'); }
@@ -514,7 +577,8 @@ function EditorForm() {
                                     className="editor-body custom-scrollbar"
                                     placeholder="Start writing the technical deep dive..."
                                     value={content}
-                                    onChange={e => setContent(e.target.value)}
+                                    onChange={e => updateContent(e.target.value)}
+                                    onKeyDown={handleKeyDown}
                                 />
                             </>
                         )}
