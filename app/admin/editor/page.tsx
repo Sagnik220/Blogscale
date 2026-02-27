@@ -47,6 +47,7 @@ function EditorForm() {
     const [saving, setSaving] = useState(false);
     const [wordCount, setWordCount] = useState(0);
     const [showLangDropdown, setShowLangDropdown] = useState(false);
+    const [showHeadingDropdown, setShowHeadingDropdown] = useState(false);
 
     const fileInputRef = useRef<HTMLInputElement>(null);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -168,6 +169,21 @@ function EditorForm() {
             textarea.selectionEnd = start + prefix.length + selectedText.length;
             textarea.focus();
         }, 0);
+    };
+
+    const applyHeading = (level: number) => {
+        const prefix = '#'.repeat(level) + ' ';
+        applyFormatting(prefix, '');
+    };
+
+    const insertList = (type: 'bullet' | 'number') => {
+        const prefix = type === 'bullet' ? '- ' : '1. ';
+        applyFormatting(prefix, '');
+    };
+
+    const insertTable = () => {
+        const tableTemplate = `\n| Header 1 | Header 2 |\n| :--- | :--- |\n| Data 1 | Data 2 |\n| Data 3 | Data 4 |\n`;
+        applyFormatting(tableTemplate, '');
     };
 
     const handleSave = async () => {
@@ -402,12 +418,38 @@ function EditorForm() {
                         <div style={{ width: '1px', height: '24px', background: '#1a1a1a' }}></div>
 
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                            <div className="toolbar-dropdown-wrapper">
+                                <button className="btn-icon" onClick={() => setShowHeadingDropdown(!showHeadingDropdown)} title="Headings">
+                                    <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>format_size</span>
+                                </button>
+                                {showHeadingDropdown && (
+                                    <div className="toolbar-dropdown">
+                                        {[1, 2, 3, 4].map(level => (
+                                            <button key={level} className="dropdown-option" onClick={() => { applyHeading(level); setShowHeadingDropdown(false); }}>
+                                                Heading {level}
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+
                             <button className="btn-icon" onClick={() => applyFormatting('**', '**')} title="Bold">
                                 <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>format_bold</span>
                             </button>
                             <button className="btn-icon" onClick={() => applyFormatting('*', '*')} title="Italic">
                                 <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>format_italic</span>
                             </button>
+
+                            <div style={{ width: '1px', height: '16px', background: '#222', margin: '0 0.25rem' }}></div>
+
+                            <button className="btn-icon" onClick={() => insertList('bullet')} title="Bullet List">
+                                <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>format_list_bulleted</span>
+                            </button>
+                            <button className="btn-icon" onClick={() => insertList('number')} title="Numbered List">
+                                <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>format_list_numbered</span>
+                            </button>
+
+                            <div style={{ width: '1px', height: '16px', background: '#222', margin: '0 0.25rem' }}></div>
 
                             <div className="lang-select-wrapper">
                                 <button className="btn-icon" onClick={() => setShowLangDropdown(!showLangDropdown)} title="Code Block">
@@ -433,6 +475,9 @@ function EditorForm() {
 
                             <button className="btn-icon" onClick={() => applyFormatting('[', '](url)')} title="Link">
                                 <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>link</span>
+                            </button>
+                            <button className="btn-icon" onClick={() => insertTable()} title="Table">
+                                <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>table_chart</span>
                             </button>
                             <button className="btn-icon" onClick={() => fileInputRef.current?.click()} title="Image">
                                 <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>image</span>
