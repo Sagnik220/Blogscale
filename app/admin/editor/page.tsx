@@ -303,6 +303,45 @@ function EditorForm() {
         if (fileInputRef.current) fileInputRef.current.value = '';
     };
 
+    const handlePaste = async (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+        const items = e.clipboardData.items;
+        let imageFound = false;
+
+        for (let i = 0; i < items.length; i++) {
+            if (items[i].type.indexOf('image') !== -1) {
+                const file = items[i].getAsFile();
+                if (!file) continue;
+
+                imageFound = true;
+                e.preventDefault();
+
+                const formData = new FormData();
+                formData.append('file', file);
+
+                try {
+                    const res = await fetch('/api/upload', { method: 'POST', body: formData });
+                    const data = await res.json();
+                    if (data.url) {
+                        const markdownImage = `\n![Pasted Image](${data.url}#w=100)\n`;
+                        const textarea = textareaRef.current;
+                        if (textarea) {
+                            const start = textarea.selectionStart;
+                            const end = textarea.selectionEnd;
+                            const newContent = content.substring(0, start) + markdownImage + content.substring(end);
+                            updateContent(newContent);
+                            setTimeout(() => {
+                                textarea.selectionStart = textarea.selectionEnd = start + markdownImage.length;
+                                textarea.focus();
+                            }, 0);
+                        }
+                    }
+                } catch (err) {
+                    console.error('Paste upload failed:', err);
+                }
+            }
+        }
+    };
+
     return (
         <div style={{ display: 'flex', height: '100vh', width: '100%', fontFamily: 'var(--font-space)', background: '#050505', color: '#e5e5e5' }}>
 
@@ -579,6 +618,7 @@ function EditorForm() {
                                     value={content}
                                     onChange={e => updateContent(e.target.value)}
                                     onKeyDown={handleKeyDown}
+                                    onPaste={handlePaste}
                                 />
                             </>
                         )}
