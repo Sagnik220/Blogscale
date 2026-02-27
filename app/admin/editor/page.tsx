@@ -381,6 +381,9 @@ function EditorForm() {
             } finally {
                 setIsUploadingImage(false);
             }
+        } else if (types.includes('text/html')) {
+            const html = clipboardData.getData('text/html');
+            console.log('HTML Paste detected:', html.substring(0, 100) + '...');
         } else {
             // Log for debugging if it was a paste but no image was found
             if (types.includes('Files') || items.some(i => i.kind === 'file')) {
