@@ -138,6 +138,28 @@
     letter-spacing: 0.05em;
 }
 
+.article-content .btn-copy {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: none;
+    color: #6b7280;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.article-content .btn-copy:hover {
+    background: #f3f4f6;
+    color: #111;
+}
+
+.article-content .btn-copy.copied {
+    color: #10b981;
+}
+
 .article-content .code-content {
     background-color: #0d0d0d;
 }

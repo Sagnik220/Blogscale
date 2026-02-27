@@ -8,6 +8,7 @@ import { ShareButton } from './ShareButton';
 
 import hljs from 'highlight.js';
 import 'highlight.js/styles/github-dark.css';
+import { CopyHandler } from './CopyHandler';
 
 export const dynamic = 'force-dynamic';
 
@@ -25,8 +26,14 @@ renderer.code = function ({ text, lang, escaped }: { text: string, lang?: string
     return `
         <div class="code-block" data-lang="${language}">
             <div class="code-header">
-                <span class="code-lang">${displayLang}</span>
-                <span class="material-symbols-outlined" style="font-size: 16px; opacity: 0.5;">expand_more</span>
+                <div style="display: flex; align-items: center; gap: 4px;">
+                    <span class="code-lang">${displayLang}</span>
+                    <span class="material-symbols-outlined" style="font-size: 16px; opacity: 0.5;">expand_more</span>
+                </div>
+                <button class="btn-copy" title="Copy code">
+                    <span class="material-symbols-outlined" style="font-size: 16px;">content_copy</span>
+                    <span style="font-size: 11px; font-weight: 700;">COPY</span>
+                </button>
             </div>
             <div class="code-content">
                 <pre><code class="hljs language-${language}">${highlighted}</code></pre>
@@ -60,6 +67,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
 
     return (
         <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#ffffff', color: '#000000', fontFamily: 'var(--font-space, Space Grotesk, sans-serif)', overflowX: 'hidden' }}>
+            <CopyHandler />
 
             {/* Progress Bar */}
             <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', zIndex: 100, height: '6px', background: 'transparent' }}>

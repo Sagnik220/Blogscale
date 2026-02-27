@@ -203,6 +203,28 @@
     letter-spacing: 0.05em;
 }
 
+.blog-content .btn-copy {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.blog-content .btn-copy:hover {
+    background: #222;
+    color: #fff;
+}
+
+.blog-content .btn-copy.copied {
+    color: #10b981;
+}
+
 .blog-content .code-content {
     background-color: #0d0d0d;
 }

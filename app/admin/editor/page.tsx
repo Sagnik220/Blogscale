@@ -65,8 +65,14 @@ function EditorForm() {
             return `
                 <div class="code-block" data-lang="${language}">
                     <div class="code-header">
-                        <span class="code-lang">${displayLang}</span>
-                        <span class="material-symbols-outlined" style="font-size: 16px; opacity: 0.5;">expand_more</span>
+                        <div style="display: flex; align-items: center; gap: 4px;">
+                            <span class="code-lang">${displayLang}</span>
+                            <span class="material-symbols-outlined" style="font-size: 16px; opacity: 0.5;">expand_more</span>
+                        </div>
+                        <button class="btn-copy" title="Copy code">
+                            <span class="material-symbols-outlined" style="font-size: 16px;">content_copy</span>
+                            <span style="font-size: 11px; font-weight: 700;">COPY</span>
+                        </button>
                     </div>
                     <div class="code-content">
                         <pre><code class="hljs language-${language}">${highlighted}</code></pre>
@@ -109,6 +115,41 @@ function EditorForm() {
         const words = content.trim().split(/\s+/).filter(Boolean).length;
         setWordCount(words);
     }, [content]);
+
+    // Handle copy buttons in preview mode
+    useEffect(() => {
+        if (!previewMode) return;
+
+        const handleCopy = async (e: MouseEvent) => {
+            const target = e.target as HTMLElement;
+            const btn = target.closest('.btn-copy');
+            if (!btn) return;
+
+            const codeBlock = btn.closest('.code-block');
+            const code = codeBlock?.querySelector('code')?.innerText;
+
+            if (code) {
+                try {
+                    await navigator.clipboard.writeText(code);
+                    const originalContent = btn.innerHTML;
+                    btn.innerHTML = `
+                        <span class="material-symbols-outlined" style="font-size: 16px;">check</span>
+                        <span style="font-size: 11px; font-weight: 700;">COPIED!</span>
+                    `;
+                    btn.classList.add('copied');
+                    setTimeout(() => {
+                        btn.innerHTML = originalContent;
+                        btn.classList.remove('copied');
+                    }, 2000);
+                } catch (err) {
+                    console.error('Failed to copy: ', err);
+                }
+            }
+        };
+
+        document.addEventListener('click', handleCopy);
+        return () => document.removeEventListener('click', handleCopy);
+    }, [previewMode]);
 
     const applyFormatting = (prefix: string, suffix: string) => {
         const textarea = textareaRef.current;
